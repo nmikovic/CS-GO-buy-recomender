@@ -1,6 +1,13 @@
 package rules;
 dialect  "mvel"
 
+import java.util.ArrayList;
+import rushB.CS.GO.Buy.Recommender.facts.Armament;
+
+global ArrayList<Armament> armaments;
+
+
+
 rule "Test"
     when
     then
