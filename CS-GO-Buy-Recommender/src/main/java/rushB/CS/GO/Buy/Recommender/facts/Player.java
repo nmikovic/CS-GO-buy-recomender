@@ -3,13 +3,15 @@ package rushB.CS.GO.Buy.Recommender.facts;
 public class Player {
     private Rank rank;
     private String name;
+    private Integer cash;
 
     public Player() {
     }
 
-    public Player(Rank rank, String name) {
+    public Player(Rank rank, String name, Integer cash) {
         this.rank = rank;
         this.name = name;
+        this.cash = cash;
     }
 
 
@@ -27,5 +29,13 @@ public class Player {
 
     public void setRank(Rank rank) {
         this.rank = rank;
+    }
+
+    public Integer getCash() {
+        return cash;
+    }
+
+    public void setCash(Integer cash) {
+        this.cash = cash;
     }
 }

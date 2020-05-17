@@ -2,6 +2,8 @@ package rushB.CS.GO.Buy.Recommender.utils;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import rushB.CS.GO.Buy.Recommender.facts.Armament;
 import rushB.CS.GO.Buy.Recommender.facts.ArmamentType;
 import rushB.CS.GO.Buy.Recommender.facts.Side;
@@ -11,12 +13,18 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.HashMap;
 
+@Configuration
 public class Utilities {
+    @Bean
+    public HashMap<String, Armament> armaments() {
+        return this.loadArmament("src/main/resources/data/armament.csv");
+    }
 
-    public static ArrayList<Armament> loadArmament(String path) {
-        ArrayList<Armament> armaments = new ArrayList<>();
+
+    private HashMap<String, Armament> loadArmament(String path) {
+        HashMap<String, Armament> armaments = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(Paths.get(path))) {
             CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader();// skips header
             Iterable<CSVRecord> records = format.parse(reader);
@@ -30,7 +38,7 @@ public class Utilities {
                             ArmamentType.valueOf(record.get(1).toUpperCase()),
                             Side.valueOf(record.get(4))
                     );
-                    armaments.add(a);
+                    armaments.put(a.getName(), a);
                 } else {
                     Weapon w = new Weapon(record.get(0),
                             Integer.parseInt(record.get(2)),
@@ -39,11 +47,9 @@ public class Utilities {
                             Boolean.parseBoolean(record.get(5)),
                             Integer.parseInt(record.get(3)),
                             Boolean.parseBoolean(record.get(6)));
-                    armaments.add(w);
+                    armaments.put(w.getName(), w);
                 }
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }

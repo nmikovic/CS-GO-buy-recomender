@@ -6,34 +6,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Match {
-    private ArrayList<Round> rounds = new ArrayList<>();
     private Integer currentRound = 1;
     private Map map;
     private Side teamSide;
     private HashMap<Team, Integer> teamScore = new HashMap<>();
-    private HashMap<Player, Score> scores = new HashMap<>();
+    private ArrayList<Player> players = new ArrayList<>();
+    private HashMap<String, Score> scores = new HashMap<>();
+    private HashMap<String, ArrayList<Armament>> playerStatuses = new HashMap<>();
 
     public Match() {
     }
 
-    public Match(MatchStartInput matchStartInput) {
+    public Match(MatchStartInput matchStartInput, HashMap<String, Armament> armaments) {
         this.map = matchStartInput.getMap();
         this.teamSide = matchStartInput.getSide();
-
         this.teamScore.put(Team.TEAM, 0);
         this.teamScore.put(Team.OPPONENTS, 0);
+        this.players = matchStartInput.getTeammates();
+        this.players.forEach((player) -> {
+            this.scores.put(player.getName(), new Score());
 
-        matchStartInput.getTeammates().forEach((player) -> {
-            this.scores.put(player, new Score());
+            ArrayList<Armament> playerArmaments = new ArrayList<>();
+
+            if (this.teamSide.equals(Side.TERRORIST)) {
+                playerArmaments.add(armaments.get("Glock-18"));
+            } else {
+                playerArmaments.add(armaments.get("USP-S"));
+            }
+            this.playerStatuses.put(player.getName(), playerArmaments);
         });
-    }
-
-    public ArrayList<Round> getRounds() {
-        return rounds;
-    }
-
-    public void setRounds(ArrayList<Round> rounds) {
-        this.rounds = rounds;
     }
 
     public Integer getCurrentRound() {
@@ -60,14 +61,6 @@ public class Match {
         this.teamSide = teamSide;
     }
 
-    public HashMap<Player, Score> getScores() {
-        return scores;
-    }
-
-    public void setScores(HashMap<Player, Score> scores) {
-        this.scores = scores;
-    }
-
     public HashMap<Team, Integer> getTeamScore() {
         return teamScore;
     }
@@ -75,4 +68,30 @@ public class Match {
     public void setTeamScore(HashMap<Team, Integer> teamScore) {
         this.teamScore = teamScore;
     }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public HashMap<String, Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(HashMap<String, Score> scores) {
+        this.scores = scores;
+    }
+
+    public HashMap<String, ArrayList<Armament>> getPlayerStatuses() {
+        return playerStatuses;
+    }
+
+    public void setPlayerStatuses(HashMap<String, ArrayList<Armament>> playerStatuses) {
+        this.playerStatuses = playerStatuses;
+    }
+
+
 }

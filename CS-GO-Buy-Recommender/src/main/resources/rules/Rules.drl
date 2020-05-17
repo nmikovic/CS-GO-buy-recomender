@@ -1,0 +1,29 @@
+package rules;
+dialect  "mvel"
+
+import java.util.ArrayList;
+import rushB.CS.GO.Buy.Recommender.facts.Armament;
+import rushB.CS.GO.Buy.Recommender.facts.Match;
+import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;
+import rushB.CS.GO.Buy.Recommender.facts.Player;
+import rushB.CS.GO.Buy.Recommender.facts.Rank
+import java.util.HashMap;
+
+
+global HashMap<String, Armament> armaments;
+
+rule "Teammates' rank is lower than DMG first round"
+    when
+        $m: Match( currentRound == 1, $teammates: players )
+        forall(
+            Player( rank < Rank.DISTINGUISHED_MASTER_GUARDIAN, cash == 800 ) from $teammates
+        )
+    then
+        Armament kevlar = armaments.get("Kevlar");
+        System.out.println($m.getPlayerStatuses().get("Mikan"));
+        /*
+        for(Player p : $m.getPlayers()) {
+            p.setCash(p.getCash() - kevlar.getPrice());
+            $m.getPlayerStatuses().get(p.getName()).add(kevlar);
+        }*/
+end
