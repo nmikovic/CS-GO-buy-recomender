@@ -3,9 +3,10 @@ dialect  "mvel"
 
 import java.util.ArrayList;
 import rushB.CS.GO.Buy.Recommender.facts.Armament;
+import rushB.CS.GO.Buy.Recommender.facts.Match;
 
 global ArrayList<Armament> armaments;
-
+global Match match;
 
 
 rule "Test"

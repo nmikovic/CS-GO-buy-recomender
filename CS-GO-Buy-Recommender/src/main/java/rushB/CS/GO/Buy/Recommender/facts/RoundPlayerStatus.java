@@ -8,16 +8,19 @@ public class RoundPlayerStatus {
     private ArrayList<Armament> armaments;
     private Side side;
     private Boolean teammate;
+    private Integer money;
 
     public RoundPlayerStatus() {
     }
 
-    public RoundPlayerStatus(Player player, Score score, ArrayList<Armament> armaments, Side side, Boolean teammate) {
+    public RoundPlayerStatus(Player player, Score score, ArrayList<Armament> armaments, Side side, Boolean teammate,
+                             Integer money) {
         this.player = player;
         this.score = score;
         this.armaments = armaments;
         this.side = side;
         this.teammate = teammate;
+        this.money = money;
     }
 
     public Player getPlayer() {
@@ -58,5 +61,13 @@ public class RoundPlayerStatus {
 
     public void setTeammate(Boolean teammate) {
         this.teammate = teammate;
+    }
+
+    public Integer getMoney() {
+        return money;
+    }
+
+    public void setMoney(Integer money) {
+        this.money = money;
     }
 }

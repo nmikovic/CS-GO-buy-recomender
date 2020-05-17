@@ -1,9 +1,9 @@
 package rushB.CS.GO.Buy.Recommender.facts;
 
 public class Score {
-    private Integer kills;
-    private Integer deaths;
-    private Integer assists;
+    private Integer kills = 0;
+    private Integer deaths = 0;
+    private Integer assists = 0;
 
     public Score() {
     }
