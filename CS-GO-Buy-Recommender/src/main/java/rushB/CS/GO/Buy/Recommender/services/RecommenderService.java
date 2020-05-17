@@ -12,12 +12,12 @@ import rushB.CS.GO.Buy.Recommender.utils.Utilities;
 import java.util.ArrayList;
 
 @Service
-public class TestService {
+public class RecommenderService {
     private final KieContainer kieContainer;
     private ArrayList<Armament> armaments;
 
     @Autowired
-    public TestService(KieContainer kieContainer) {
+    public RecommenderService(KieContainer kieContainer) {
         this.kieContainer = kieContainer;
     }
 
@@ -31,7 +31,7 @@ public class TestService {
 
 
     @EventListener(ApplicationReadyEvent.class)
-    public void loadArmaments(){
+    public void loadArmaments() {
         this.armaments = Utilities.loadArmament("src/main/resources/data/armament.csv");
     }
 }
