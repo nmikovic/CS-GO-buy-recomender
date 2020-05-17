@@ -19,11 +19,13 @@ rule "Teammates' rank is lower than DMG first round"
             Player( rank < Rank.DISTINGUISHED_MASTER_GUARDIAN, cash == 800 ) from $teammates
         )
     then
-        Armament kevlar = armaments.get("Kevlar");
-        System.out.println($m.getPlayerStatuses().get("Mikan"));
-        /*
+        Armament kevlar = (Armament) armaments.get("Kevlar");
+
         for(Player p : $m.getPlayers()) {
             p.setCash(p.getCash() - kevlar.getPrice());
-            $m.getPlayerStatuses().get(p.getName()).add(kevlar);
-        }*/
+            $m.getPlayerStatuses().get(p.getName()).getList().add(kevlar);
+        }
+
+        update($m);
+        System.out.println(String.format("Bought %s", kevlar.getName()));
 end

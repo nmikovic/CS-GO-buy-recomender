@@ -12,7 +12,7 @@ public class Match {
     private HashMap<Team, Integer> teamScore = new HashMap<>();
     private ArrayList<Player> players = new ArrayList<>();
     private HashMap<String, Score> scores = new HashMap<>();
-    private HashMap<String, ArrayList<Armament>> playerStatuses = new HashMap<>();
+    private HashMap<String, Armaments> playerStatuses = new HashMap<>();
 
     public Match() {
     }
@@ -26,12 +26,12 @@ public class Match {
         this.players.forEach((player) -> {
             this.scores.put(player.getName(), new Score());
 
-            ArrayList<Armament> playerArmaments = new ArrayList<>();
+            Armaments playerArmaments = new Armaments();
 
             if (this.teamSide.equals(Side.TERRORIST)) {
-                playerArmaments.add(armaments.get("Glock-18"));
+                playerArmaments.getList().add(armaments.get("Glock-18"));
             } else {
-                playerArmaments.add(armaments.get("USP-S"));
+                playerArmaments.getList().add(armaments.get("USP-S"));
             }
             this.playerStatuses.put(player.getName(), playerArmaments);
         });
@@ -85,13 +85,11 @@ public class Match {
         this.scores = scores;
     }
 
-    public HashMap<String, ArrayList<Armament>> getPlayerStatuses() {
+    public HashMap<String, Armaments> getPlayerStatuses() {
         return playerStatuses;
     }
 
-    public void setPlayerStatuses(HashMap<String, ArrayList<Armament>> playerStatuses) {
+    public void setPlayerStatuses(HashMap<String, Armaments> playerStatuses) {
         this.playerStatuses = playerStatuses;
     }
-
-
 }

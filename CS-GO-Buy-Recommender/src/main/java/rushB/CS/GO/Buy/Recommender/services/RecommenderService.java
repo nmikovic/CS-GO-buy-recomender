@@ -4,8 +4,6 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import rushB.CS.GO.Buy.Recommender.dtos.MatchStartInput;
 import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;
