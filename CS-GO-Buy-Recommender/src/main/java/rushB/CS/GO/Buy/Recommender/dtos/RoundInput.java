@@ -12,7 +12,7 @@ public class RoundInput {
     private BuyOptions teamState;
     private BuyOptions opponentsState;
     private Tactic tactic;
-    private ArrayList<Score> roundScores; // should be added to general match score
+    private HashMap<String,Score> roundScores; // should be added to general match score
 
     private Boolean opponentHasAWP;
 
@@ -67,11 +67,11 @@ public class RoundInput {
         this.tactic = tactic;
     }
 
-    public ArrayList<Score> getRoundScores() {
+    public HashMap<String, Score> getRoundScores() {
         return roundScores;
     }
 
-    public void setRoundScores(ArrayList<Score> roundScores) {
+    public void setRoundScores(HashMap<String,Score> roundScores) {
         this.roundScores = roundScores;
     }
 
