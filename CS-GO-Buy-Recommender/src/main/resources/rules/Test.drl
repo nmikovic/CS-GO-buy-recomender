@@ -1,0 +1,8 @@
+package rules;
+dialect  "mvel"
+
+rule "Test"
+    when
+    then
+        System.out.println("Paprikas");
+end
