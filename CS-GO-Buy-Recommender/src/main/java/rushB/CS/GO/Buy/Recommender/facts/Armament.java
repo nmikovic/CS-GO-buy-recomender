@@ -52,11 +52,10 @@ public class Armament {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (this.getClass() != o.getClass())
-            return false;
-        Armament a = (Armament) o;
-        return this.name.equals(a.name);
+        if (this == o) return true;
+        if (!(o instanceof Armament)) return false;
+        Armament armament = (Armament) o;
+        return name.equals(armament.name);
     }
 
     @Override
