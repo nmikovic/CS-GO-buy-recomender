@@ -3,29 +3,107 @@ dialect  "mvel"
 
 import java.util.ArrayList;
 import rushB.CS.GO.Buy.Recommender.facts.Armament;
-import rushB.CS.GO.Buy.Recommender.facts.Match;
+import rushB.CS.GO.Buy.Recommender.facts.Armaments;
+import rushB.CS.GO.Buy.Recommender.facts.Player;
 import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;
 import rushB.CS.GO.Buy.Recommender.facts.Player;
-import rushB.CS.GO.Buy.Recommender.facts.Rank
-import java.util.HashMap;
-
+import rushB.CS.GO.Buy.Recommender.facts.Rank;
+import rushB.CS.GO.Buy.Recommender.facts.Tactic;
+import rushB.CS.GO.Buy.Recommender.facts.BuyOptions;
+import java.util.HashMap
+import java.util.List;
 
 global HashMap<String, Armament> armaments;
 
 rule "Teammates' rank is lower than DMG first round"
     when
-        $m: Match( currentRound == 1, $teammates: players )
+        $ri: RoundInput( currentRound == 1 || currentRound == 16, $teammates: players)
+        exists(Player( cash == 800, rank < Rank.DISTINGUISHED_MASTER_GUARDIAN ) from $teammates)
         forall(
-            Player( rank < Rank.DISTINGUISHED_MASTER_GUARDIAN, cash == 800 ) from $teammates
+            Player(cash == 800, rank < Rank.DISTINGUISHED_MASTER_GUARDIAN ) from $teammates
         )
     then
         Armament kevlar = (Armament) armaments.get("Kevlar");
 
-        for(Player p : $m.getPlayers()) {
+        for(Player p : $teammates) {
             p.setCash(p.getCash() - kevlar.getPrice());
-            $m.getPlayerStatuses().get(p.getName()).getList().add(kevlar);
+            p.getArmaments().getList().add(kevlar);
         }
 
-        update($m);
-        System.out.println(String.format("Bought %s", kevlar.getName()));
+        update($ri);
+
+        System.out.println(String.format("Bought %s for all players", kevlar.getName()));
+end
+
+rule "Determine team state"
+    when
+        $ri: RoundInput( currentTeamState == null, $teammates: players, currentRound != 1 && currentRound != 16 )
+    then
+end
+
+rule "Determine if ECO" extends "Determine team state"
+    when
+        exists(Player( cash < 3000 ) from $teammates )
+    then
+        modify($ri){ setCurrentTeamState(BuyOptions.ECO) }
+        System.out.println("Team should go ECO");
+end
+
+rule "Determine if HALF BUY" extends "Determine team state"
+    when
+        exists(Player( cash > 3000 && cash < 4000 ) from $teammates)
+        forall(
+            Player( cash > 3000 && cash < 4000 ) from $teammates
+        )
+    then
+        modify($ri){ setCurrentTeamState(BuyOptions.HALF_BUY) }
+        System.out.println("Team should go HALF BUY");
+end
+
+rule "Determine if FULL BUY" extends "Determine team state"
+    when
+        exists(Player( cash > 4000 ) from $teammates)
+        forall(
+            Player( cash > 4000 ) from $teammates
+        )
+    then
+        modify($ri){ setCurrentTeamState(BuyOptions.FULL_BUY) }
+        System.out.println("Team should go FULL BUY");
+end
+
+rule "Buy kevlar if not ECO or first round"
+    when
+        $ri: RoundInput( currentTeamState != null && currentTeamState != BuyOptions.ECO , currentRound != 1 &&
+        currentRound != 16, $teammates: players )
+        $p: Player( $a: armaments ) from $teammates
+        forall(
+            Armament( name != "Kevlar" && name != "Kevlar + Helmet" ) from $a.list
+        )
+    then
+        Armament kevlar = (Armament) armaments.get("Kevlar");
+
+        $p.setCash($p.getCash() - kevlar.getPrice());
+        $p.getArmaments().getList().add(kevlar);
+
+        update($ri);
+        System.out.println(String.format("Bought Kevlar for %s", $p.getName()));
+end
+
+rule "Buy helmet if kevlar is bought and not ECO or first round"
+    when
+        $ri: RoundInput( currentTeamState != null && currentTeamState != BuyOptions.ECO , currentRound != 1 &&
+        currentRound != 16, $teammates: players )
+        $p: Player( $a: armaments ) from $teammates
+        exists(Armament( name == "Kevlar") from $a.list)
+    then
+        Armament kevlarHelmet = (Armament) armaments.get("Kevlar + Helmet");
+        Armament kevlar = (Armament) armaments.get("Kevlar");
+
+        $p.setCash($p.getCash() - 350);
+
+        $p.getArmaments().getList().remove(kevlar);
+        $p.getArmaments().getList().add(kevlarHelmet);
+        update($ri);
+
+        System.out.println(String.format("Bought Helmet for %s", $p.getName()));
 end

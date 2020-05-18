@@ -4,6 +4,8 @@ public class Player {
     private Rank rank;
     private String name;
     private Integer cash;
+    private Armaments armaments = new Armaments();
+    private Score score = new Score();
 
     public Player() {
     }
@@ -14,6 +16,22 @@ public class Player {
         this.cash = cash;
     }
 
+
+    public Armaments getArmaments() {
+        return armaments;
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public void setArmaments(Armaments armaments) {
+        this.armaments = armaments;
+    }
 
     public String getName() {
         return name;
