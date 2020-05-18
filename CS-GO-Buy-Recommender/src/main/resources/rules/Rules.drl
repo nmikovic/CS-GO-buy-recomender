@@ -4,14 +4,17 @@ dialect  "mvel"
 import java.util.ArrayList;
 import rushB.CS.GO.Buy.Recommender.facts.Armament;
 import rushB.CS.GO.Buy.Recommender.facts.Armaments;
+import rushB.CS.GO.Buy.Recommender.facts.Side;
 import rushB.CS.GO.Buy.Recommender.facts.Player;
 import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;
 import rushB.CS.GO.Buy.Recommender.facts.Player;
 import rushB.CS.GO.Buy.Recommender.facts.Rank;
 import rushB.CS.GO.Buy.Recommender.facts.Tactic;
 import rushB.CS.GO.Buy.Recommender.facts.BuyOptions;
+import rushB.CS.GO.Buy.Recommender.facts.Map;
 import java.util.HashMap
-import java.util.List;
+import java.util.List
+import rushB.CS.GO.Buy.Recommender.facts.Weapon;
 
 global HashMap<String, Armament> armaments;
 
@@ -106,4 +109,22 @@ rule "Buy helmet if kevlar is bought and not ECO or first round"
         update($ri);
 
         System.out.println(String.format("Bought Helmet for %s", $p.getName()));
+end
+
+rule "Buy p250 Eco round CT for map CACHE"
+    when
+        $ri: RoundInput(currentTeamState == BuyOptions.ECO, tactic == Tactic.OFFENSIVE,
+                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, $teammates: players )
+        $p: Player( $a: armaments ) from $teammates
+        exists(Armament( name == "USP-S" ) from $a.list)
+    then
+        Armament p250 = (Armament) armaments.get("P250");
+        Armament usp = (Armament) armaments.get("USP-S");
+
+        $p.setCash($p.getCash() - p250.getPrice());
+        $p.getArmaments().getList().remove(usp);
+        $p.getArmaments().getList().add(p250);
+        update($ri)
+
+        System.out.println(String.format("Bought P250 for %s", $p.getName()));
 end

@@ -39,4 +39,14 @@ public class Weapon extends Armament {
     public void setHelmetHeadshotKill(Boolean helmetHeadshotKill) {
         this.helmetHeadshotKill = helmetHeadshotKill;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

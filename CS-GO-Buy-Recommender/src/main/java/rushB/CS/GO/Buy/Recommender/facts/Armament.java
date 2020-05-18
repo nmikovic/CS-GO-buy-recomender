@@ -1,5 +1,7 @@
 package rushB.CS.GO.Buy.Recommender.facts;
 
+import java.util.Objects;
+
 public class Armament {
     protected String name;
     protected Integer price;
@@ -46,5 +48,19 @@ public class Armament {
 
     public void setSide(Side side) {
         this.side = side;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (this.getClass() != o.getClass())
+            return false;
+        Armament a = (Armament) o;
+        return this.name.equals(a.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
