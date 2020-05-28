@@ -3,12 +3,14 @@ package rushB.CS.GO.Buy.Recommender.dtos;
 import rushB.CS.GO.Buy.Recommender.facts.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RoundInput {
-    private Integer currentRound;
     private Map map;
     private Side teamSide;
     private ArrayList<Player> players;
+    private HashMap<String, ArrayList<Armament>> armaments;
+    private HashMap<String, Integer> cash;
     private Boolean wonPreviousRound;
     private BuyOptions previousTeamState;
     private BuyOptions previousOpponentsState;
@@ -18,6 +20,22 @@ public class RoundInput {
     private Boolean opponentHasAWP;
 
     public RoundInput() {
+    }
+
+    public HashMap<String, Integer> getCash() {
+        return cash;
+    }
+
+    public void setCash(HashMap<String, Integer> cash) {
+        this.cash = cash;
+    }
+
+    public HashMap<String, ArrayList<Armament>> getArmaments() {
+        return armaments;
+    }
+
+    public void setArmaments(HashMap<String, ArrayList<Armament>> armaments) {
+        this.armaments = armaments;
     }
 
     public BuyOptions getCurrentTeamState() {
@@ -58,14 +76,6 @@ public class RoundInput {
 
     public void setOpponentHasAWP(Boolean opponentHasAWP) {
         this.opponentHasAWP = opponentHasAWP;
-    }
-
-    public Integer getCurrentRound() {
-        return currentRound;
-    }
-
-    public void setCurrentRound(Integer currentRound) {
-        this.currentRound = currentRound;
     }
 
     public Map getMap() {

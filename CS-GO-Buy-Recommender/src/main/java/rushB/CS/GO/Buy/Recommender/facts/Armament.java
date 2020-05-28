@@ -3,6 +3,7 @@ package rushB.CS.GO.Buy.Recommender.facts;
 import java.util.Objects;
 
 public class Armament {
+    protected String playerStatus;
     protected String name;
     protected Integer price;
     protected ArmamentType type;
@@ -16,6 +17,14 @@ public class Armament {
         this.price = price;
         this.type = type;
         this.side = side;
+    }
+
+    public String getPlayerStatus() {
+        return playerStatus;
+    }
+
+    public void setPlayerStatus(String playerStatus) {
+        this.playerStatus = playerStatus;
     }
 
     public String getName() {
