@@ -1,6 +1,5 @@
 package rushB.CS.GO.Buy.Recommender.services;
 
-import org.apache.commons.lang3.mutable.MutableInt;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
@@ -8,31 +7,29 @@ import org.kie.api.runtime.rule.QueryResultsRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;
-import rushB.CS.GO.Buy.Recommender.facts.Armament;
-import rushB.CS.GO.Buy.Recommender.facts.Player;
-import rushB.CS.GO.Buy.Recommender.facts.PlayerStatus;
-import rushB.CS.GO.Buy.Recommender.facts.Round;
+import rushB.CS.GO.Buy.Recommender.facts.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 @Service
 public class RecommenderService {
-    private final KieContainer kieContainer;
+
+    @Autowired
+    private KieContainer kieContainer;
+
     @Autowired
     private HashMap<String, Armament> armaments;
     private KieSession session;
-
-    @Autowired
-    public RecommenderService(KieContainer kieContainer) {
-        this.kieContainer = kieContainer;
-    }
+    private Map map;
+    private ArrayList<Player> players;
 
 
     private Integer prepareSession() {
         this.session = kieContainer.newKieSession("testSession");
         this.session.setGlobal("armaments", this.armaments);
-        this.session.insert(new MutableInt(1));
+        this.session.insert(new Integer(1));
 
         return 1;
     }
@@ -41,7 +38,7 @@ public class RecommenderService {
         QueryResults results = this.session.getQueryResults("Get current round");
 
         for (QueryResultsRow row : results) {
-            return ((MutableInt) row.get("$rn")).getValue();
+            return ((Integer) row.get("$rn"));
         }
 
         return null;
@@ -50,11 +47,21 @@ public class RecommenderService {
     public void recommendForRound(RoundInput roundInput) {
         Integer currentRound = this.session == null ? this.prepareSession() : this.getCurrentRound();
 
+        if(currentRound != 1){
+            Integer save = currentRound;
+            this.session.dispose();
+            this.session = kieContainer.newKieSession("testSession");
+            this.session.setGlobal("armaments", this.armaments);
+            this.session.insert(new Integer (save));
+            currentRound = save;
+        }
         Round round = new Round(roundInput, currentRound);
 
         this.session.insert(round);
 
         if (currentRound == 1) {
+            this.map = roundInput.getMap();
+            this.players = roundInput.getPlayers();
             this.session.setGlobal("map", roundInput.getMap());
 
             for (Player p : roundInput.getPlayers())
@@ -79,10 +86,8 @@ public class RecommenderService {
                 this.session.insert(a);
             }
         }
-        this.session.getAgenda().getAgendaGroup("MAIN").setFocus();
+
         this.session.fireAllRules();
 
-        this.session.getAgenda().getAgendaGroup("end-round").setFocus();
-        this.session.fireAllRules();
     }
 }

@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import rushB.CS.GO.Buy.Recommender.facts.Weapon;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 global HashMap<String, Armament> armaments;
 global Map map;
@@ -26,7 +25,7 @@ global HashMap<String, Player> players;
 
 rule "Teammates' rank is lower than DMG first round"
     when
-        MutableInt( getValue() == 1 || getValue() == 16, $rn: getValue() )
+        Integer( this == 1 || this == 16, $rn: this )
         Player( $name: name, rank < Rank.DISTINGUISHED_MASTER_GUARDIAN )
         $ps: PlayerStatus( player == $name, cash == 800, round == $rn )
         List( size == 5 ) from collect(Player( rank < Rank.DISTINGUISHED_MASTER_GUARDIAN ))
@@ -45,7 +44,7 @@ end
 
 rule "Determine team state"
     when
-        MutableInt( getValue() != 1 && getValue() != 16, $rn: getValue() )
+        Integer( this != 1 && this != 16, $rn: this )
         $r: Round( currentTeamState == null, number == $rn )
     then
 end
@@ -53,16 +52,19 @@ end
 
 rule "Determine if ECO" extends "Determine team state"
     when
+        //$l: List( ) from collect ( PlayerStatus(round == $rn))
         exists(PlayerStatus( cash < 3000, round == $rn ))
+        $p: PlayerStatus(round == $rn)
     then
         modify($r){ setCurrentTeamState(BuyOptions.ECO) }
+        System.out.println("Player status round" + $p.getRound() + " " + $p.getCash());
         System.out.println("Team should go ECO");
 end
 
 
 rule "Determine if HALF BUY" extends "Determine team state"
     when
-        exists(PlayerStatus( cash >= 3000 && cash < 4000, round == $rn ))
+        //exists(PlayerStatus( cash >= 3000 && cash < 4000, round == $rn ))
         forall(
             PlayerStatus( cash >= 3000 && cash < 4000, round == $rn )
         )
@@ -73,7 +75,7 @@ end
 
 rule "Determine if FULL BUY" extends "Determine team state"
     when
-        exists(PlayerStatus( cash >= 4000, round == $rn ))
+        //exists(PlayerStatus( cash >= 4000, round == $rn ))
         forall(
             PlayerStatus( cash >= 4000, round == $rn )
         )
@@ -104,16 +106,18 @@ end
 */
 
 rule "Next round"
-    agenda-group "end-round"
-    no-loop
+    salience -100
+    lock-on-active
     when
-        $rn: MutableInt()
+        $rn: Integer()
     then
-        modify($rn){ increment() }
+        insert(new Integer($rn + 1))
+        delete($rn);
+        //System.out.println($rn);
 end
 
 query "Get current round"
-    $rn: MutableInt()
+    $rn: Integer()
 end
 
 /*
