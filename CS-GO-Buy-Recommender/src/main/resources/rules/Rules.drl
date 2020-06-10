@@ -1,5 +1,5 @@
 package rules;
-dialect  "mvel"
+dialect  "java"
 
 import java.util.ArrayList;
 import rushB.CS.GO.Buy.Recommender.facts.Armament;
@@ -36,13 +36,14 @@ rule "Teammates' rank is lower than DMG first round"
         modify($ps) { setCash(newCash) }
 
         kevlar.setPlayerStatus($ps.getId());
-        insert(kevlar)
+        insert(kevlar);
 
         System.out.println(String.format("Bought %s for %s", kevlar.getName(), $name));
 end
 
 
 rule "Determine team state"
+    salience 100
     when
         Integer( this != 1 && this != 16, $rn: this )
         $r: Round( currentTeamState == null, number == $rn )
@@ -82,14 +83,17 @@ rule "Determine if FULL BUY" extends "Determine team state"
         System.out.println("Team should go FULL BUY");
 end
 
-/*
 rule "Buy kevlar if not ECO or first round"
+    salience 99
     when
-        eval(currentRound != 1 && currentRound != 16)
-        Round( currentTeamState != null && currentTeamState != BuyOptions.ECO, number == currentRound )
-        $p: Player ( )
-        $ps: PlayerStatus( player == $p.getName(), round == currentRound )
-        not Armament( name == "Kevlar" || name == "Kevlar + Helmet", playerStatus == $ps.getId())
+        Integer( this != 1 && this != 16, $rn: this )
+        Round( currentTeamState != null && currentTeamState != BuyOptions.ECO, number == $rn )
+        $p: Player( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 650 )
+        exists(Armament( name != "Kevlar" && name != "Kevlar + Helmet", playerStatus == $ps.getId()))
+        forall(
+            Armament( name != "Kevlar" && name != "Kevlar + Helmet", playerStatus == $ps.getId())
+        )
     then
         Armament kevlar = (Armament) armaments.get("Kevlar");
 
@@ -101,28 +105,29 @@ rule "Buy kevlar if not ECO or first round"
 
         System.out.println(String.format("Bought Kevlar for %s", $p.getName()));
 end
-*/
-
 
 /*
 rule "Buy helmet if kevlar is bought and not ECO or first round"
+    salience 98
     when
-        $ri: RoundInput( currentTeamState != null && currentTeamState != BuyOptions.ECO , currentRound != 1 &&
-        currentRound != 16, $teammates: players )
-        $p: Player( $a: armaments ) from $teammates
-        exists(Armament( name == "Kevlar") from $a.list)
+        Integer( this != 1 && this != 16, $rn: this )
+        Round( currentTeamState != null && currentTeamState != BuyOptions.ECO, number == $rn )
+        $plist: Player ( $name: name )
+        $ps: PlayerStatus( player == $name, round == $rn, cash >= 350 )
+        $kevlar: Armament(name == "Kevlar", playerStatus == $ps.getId())
     then
         Armament kevlarHelmet = (Armament) armaments.get("Kevlar + Helmet");
-        Armament kevlar = (Armament) armaments.get("Kevlar");
 
-        $p.setCash($p.getCash() - 350);
+        Integer newCash = $ps.getCash() - 350;
+        modify($ps) { setCash(newCash) }
 
-        $p.getArmaments().getList().remove(kevlar);
-        $p.getArmaments().getList().add(kevlarHelmet);
-        update($ri);
+        delete($kevlar);
+        kevlarHelmet.setPlayerStatus($ps.getId());
+        insert(kevlarHelmet);
 
         System.out.println(String.format("Bought Helmet for %s", $p.getName()));
 end
+
 
 rule "Buy p250 Eco round CT for map CACHE"
     when
