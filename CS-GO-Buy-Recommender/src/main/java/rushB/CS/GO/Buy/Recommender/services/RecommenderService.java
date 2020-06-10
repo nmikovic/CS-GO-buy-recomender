@@ -24,49 +24,19 @@ public class RecommenderService {
     private KieSession session;
     private Map map;
     private ArrayList<Player> players;
+    private Integer roundCounter = 1;
 
-
-    private Integer prepareSession() {
+    private void prepareSession(RoundInput roundInput) {
         this.session = kieContainer.newKieSession("testSession");
         this.session.setGlobal("armaments", this.armaments);
-        this.session.insert(new Integer(1));
+        this.session.setGlobal("map", map);
+        this.session.insert(roundCounter);
 
-        return 1;
-    }
+        for (Player p : roundInput.getPlayers())
+            this.session.insert(p);
 
-    private Integer getCurrentRound() {
-        QueryResults results = this.session.getQueryResults("Get current round");
-
-        for (QueryResultsRow row : results) {
-            return ((Integer) row.get("$rn"));
-        }
-
-        return null;
-    }
-
-    public void recommendForRound(RoundInput roundInput) {
-        Integer currentRound = this.session == null ? this.prepareSession() : this.getCurrentRound();
-
-        if(currentRound != 1){
-            Integer save = currentRound;
-            this.session.dispose();
-            this.session = kieContainer.newKieSession("testSession");
-            this.session.setGlobal("armaments", this.armaments);
-            this.session.insert(new Integer (save));
-            currentRound = save;
-        }
-        Round round = new Round(roundInput, currentRound);
-
+        Round round = new Round(roundInput, roundCounter);
         this.session.insert(round);
-
-        if (currentRound == 1) {
-            this.map = roundInput.getMap();
-            this.players = roundInput.getPlayers();
-            this.session.setGlobal("map", roundInput.getMap());
-
-            for (Player p : roundInput.getPlayers())
-                this.session.insert(p);
-        }
 
         String id;
         PlayerStatus ps;
@@ -74,7 +44,7 @@ public class RecommenderService {
             ps = new PlayerStatus();
             ps.setCash(roundInput.getCash().get(player));
             ps.setPlayer(player);
-            ps.setRound(currentRound);
+            ps.setRound(roundCounter);
 
             id = UUID.randomUUID().toString();
             ps.setId(id);
@@ -86,8 +56,14 @@ public class RecommenderService {
                 this.session.insert(a);
             }
         }
+    }
+
+    public void recommendForRound(RoundInput roundInput) {
+        this.prepareSession(roundInput);
 
         this.session.fireAllRules();
+        this.session.dispose();
+        this.roundCounter++;
 
     }
 }

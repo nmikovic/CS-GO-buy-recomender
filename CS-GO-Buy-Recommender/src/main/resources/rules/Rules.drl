@@ -52,19 +52,17 @@ end
 
 rule "Determine if ECO" extends "Determine team state"
     when
-        //$l: List( ) from collect ( PlayerStatus(round == $rn))
         exists(PlayerStatus( cash < 3000, round == $rn ))
         $p: PlayerStatus(round == $rn)
     then
         modify($r){ setCurrentTeamState(BuyOptions.ECO) }
-        System.out.println("Player status round" + $p.getRound() + " " + $p.getCash());
         System.out.println("Team should go ECO");
 end
 
 
 rule "Determine if HALF BUY" extends "Determine team state"
     when
-        //exists(PlayerStatus( cash >= 3000 && cash < 4000, round == $rn ))
+        exists(PlayerStatus( cash >= 3000 && cash < 4000, round == $rn ))
         forall(
             PlayerStatus( cash >= 3000 && cash < 4000, round == $rn )
         )
@@ -75,7 +73,7 @@ end
 
 rule "Determine if FULL BUY" extends "Determine team state"
     when
-        //exists(PlayerStatus( cash >= 4000, round == $rn ))
+        exists(PlayerStatus( cash >= 4000, round == $rn ))
         forall(
             PlayerStatus( cash >= 4000, round == $rn )
         )
@@ -105,20 +103,6 @@ rule "Buy kevlar if not ECO or first round"
 end
 */
 
-rule "Next round"
-    salience -100
-    lock-on-active
-    when
-        $rn: Integer()
-    then
-        insert(new Integer($rn + 1))
-        delete($rn);
-        //System.out.println($rn);
-end
-
-query "Get current round"
-    $rn: Integer()
-end
 
 /*
 rule "Buy helmet if kevlar is bought and not ECO or first round"
