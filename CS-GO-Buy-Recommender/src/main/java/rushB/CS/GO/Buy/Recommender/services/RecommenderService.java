@@ -24,7 +24,7 @@ public class RecommenderService {
     private Integer roundCounter = 1;
 
     private void prepareSession(RoundInput roundInput) {
-        session = kieContainer.newKieSession("testSession");
+        session = kieContainer.newKieSession("rules-session");
         session.setGlobal("armaments", armaments);
         session.setGlobal("map", roundInput.getMap());
         session.insert(roundCounter);

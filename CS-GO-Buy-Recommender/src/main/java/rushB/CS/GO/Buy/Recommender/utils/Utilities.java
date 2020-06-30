@@ -2,24 +2,29 @@ package rushB.CS.GO.Buy.Recommender.utils;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.maven.shared.invoker.*;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import rushB.CS.GO.Buy.Recommender.facts.Armament;
 import rushB.CS.GO.Buy.Recommender.facts.ArmamentType;
 import rushB.CS.GO.Buy.Recommender.facts.Side;
 import rushB.CS.GO.Buy.Recommender.facts.Weapon;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 
 @Configuration
 public class Utilities {
     @Bean
     public HashMap<String, Armament> armaments() {
-        return this.loadArmament("src/main/resources/data/armament.csv");
+        return this.loadArmament("../CS-GO-Buy-Recommender/src/main/resources/data/armament.csv");
     }
 
 
@@ -54,6 +59,15 @@ public class Utilities {
             e.printStackTrace();
         }
         return armaments;
+    }
+
+    public void mavenCleanAndInstall() throws MavenInvocationException {
+        InvocationRequest request = new DefaultInvocationRequest();
+        request.setPomFile(new File("../Rules/pom.xml"));
+        request.setGoals(Arrays.asList("clean", "install"));
+
+        Invoker invoker = new DefaultInvoker();
+        invoker.execute(request);
     }
 
 }
