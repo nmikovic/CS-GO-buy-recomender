@@ -61,7 +61,7 @@ public class Utilities {
         return armaments;
     }
 
-    public void mavenCleanAndInstall() throws MavenInvocationException {
+    public static void mavenCleanAndInstall() throws MavenInvocationException {
         InvocationRequest request = new DefaultInvocationRequest();
         request.setPomFile(new File("../Rules/pom.xml"));
         request.setGoals(Arrays.asList("clean", "install"));

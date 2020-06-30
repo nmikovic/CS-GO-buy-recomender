@@ -1,10 +1,12 @@
 package rushB.CS.GO.Buy.Recommender.configurations;
 
+import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import rushB.CS.GO.Buy.Recommender.utils.Utilities;
 
 @Configuration
 public class KieContainerConfiguration {

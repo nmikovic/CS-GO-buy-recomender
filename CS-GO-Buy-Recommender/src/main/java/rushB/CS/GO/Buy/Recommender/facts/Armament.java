@@ -1,9 +1,9 @@
 package rushB.CS.GO.Buy.Recommender.facts;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 public class Armament {
-    protected String playerStatus;
+    protected Integer playerStatus;
     protected String name;
     protected Integer price;
     protected ArmamentType type;
@@ -19,11 +19,18 @@ public class Armament {
         this.side = side;
     }
 
-    public String getPlayerStatus() {
+    public Armament(Armament other) {
+        this.name = other.name;
+        this.price = other.price;
+        this.type = other.type;
+        this.side = other.side;
+    }
+
+    public Integer getPlayerStatus() {
         return playerStatus;
     }
 
-    public void setPlayerStatus(String playerStatus) {
+    public void setPlayerStatus(Integer playerStatus) {
         this.playerStatus = playerStatus;
     }
 
@@ -59,16 +66,4 @@ public class Armament {
         this.side = side;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Armament)) return false;
-        Armament armament = (Armament) o;
-        return name.equals(armament.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
 }

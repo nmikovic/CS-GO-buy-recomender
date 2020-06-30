@@ -10,8 +10,8 @@ import rushB.CS.GO.Buy.Recommender.facts.Player;
 import rushB.CS.GO.Buy.Recommender.facts.PlayerStatus;
 import rushB.CS.GO.Buy.Recommender.facts.Round;
 
+
 import java.util.HashMap;
-import java.util.UUID;
 
 @Service
 public class RecommenderService {
@@ -24,7 +24,7 @@ public class RecommenderService {
     private Integer roundCounter = 1;
 
     private void prepareSession(RoundInput roundInput) {
-        session = kieContainer.newKieSession("rules-session");
+        session = kieContainer.newKieSession();
         session.setGlobal("armaments", armaments);
         session.setGlobal("map", roundInput.getMap());
         session.insert(roundCounter);
@@ -35,15 +35,14 @@ public class RecommenderService {
         Round round = new Round(roundInput, roundCounter);
         session.insert(round);
 
-        String id;
         PlayerStatus ps;
+        int id = 0;
         for (String player : roundInput.getArmaments().keySet()) {
             ps = new PlayerStatus();
             ps.setCash(roundInput.getCash().get(player));
             ps.setPlayer(player);
             ps.setRound(roundCounter);
 
-            id = UUID.randomUUID().toString();
             ps.setId(id);
 
             session.insert(ps);
@@ -52,6 +51,7 @@ public class RecommenderService {
                 a.setPlayerStatus(id);
                 session.insert(a);
             }
+            id++;
         }
     }
 
@@ -59,6 +59,14 @@ public class RecommenderService {
         prepareSession(roundInput);
 
         session.fireAllRules();
+
+        for (Object o : this.session.getObjects()) {
+            if (o.getClass().equals(Armament.class)) {
+                Armament a = (Armament) o;
+                System.out.println(String.format("%d : %s", a.getPlayerStatus(), a.getName()));
+            }
+        }
+
         session.dispose();
         roundCounter++;
     }
