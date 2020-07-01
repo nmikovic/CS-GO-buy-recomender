@@ -1,7 +1,5 @@
 package rushB.CS.GO.Buy.Recommender.facts;
 
-import java.io.Serializable;
-
 public class Armament {
     protected Integer playerStatus;
     protected String name;

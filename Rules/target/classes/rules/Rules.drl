@@ -86,7 +86,7 @@ end
 rule "Buy kevlar if not ECO or first round"
     salience 99
     when
-        Integer( this != 1 && this != 16, $rn: this )
+        $rn: Integer( )
         Round( currentTeamState != null && currentTeamState != BuyOptions.ECO, number == $rn )
         $p: Player( )
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 650 )
@@ -107,7 +107,7 @@ end
 rule "Buy helmet if kevlar is bought and not ECO or first round"
     salience 98
     when
-        Integer( this != 1 && this != 16, $rn: this )
+        $rn: Integer( )
         Round( currentTeamState != null && currentTeamState != BuyOptions.ECO, number == $rn )
         $p: Player ( )
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 350 )
@@ -126,113 +126,181 @@ rule "Buy helmet if kevlar is bought and not ECO or first round"
         System.out.println(String.format("Bought Helmet for %s", $p.getName()));
 end
 
-/*
-rule "Buy p250 Eco round CT for map CACHE"
-    when
-        $ri: RoundInput(currentTeamState == BuyOptions.ECO, tactic == Tactic.OFFENSIVE,
-                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, $teammates: players )
-        $p: Player( $a: armaments ) from $teammates
-        exists(Armament( name == "USP-S" ) from $a.list)
-    then
-        Armament p250 = (Armament) armaments.get("P250");
-        Armament usp = (Armament) armaments.get("USP-S");
 
-        $p.setCash($p.getCash() - p250.getPrice());
-        $p.getArmaments().getList().remove(usp);
-        $p.getArmaments().getList().add(p250);
-        update($ri)
+rule "Buy p250 Eco round CT for map CACHE"
+    salience 99
+    when
+        $rn: Integer( )
+        $ri: Round( currentTeamState == BuyOptions.ECO, tactic == Tactic.OFFENSIVE,
+                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn )
+        $p: Player( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 300 )
+        not( Armament( name != "USP-S", type == ArmamentType.PISTOL || type == ArmamentType.HEAVY || type ==
+        ArmamentType.SMG || type == ArmamentType.RIFLE, playerStatus == $ps.getId() ))
+        $usp: Armament( name == "USP-S", playerStatus == $ps.getId() )
+    then
+        Armament p250 = new Armament((Armament) armaments.get("P250"));
+
+        Integer newCash = $ps.getCash() - p250.getPrice();
+        modify($ps) { setCash(newCash) }
+
+        delete($usp);
+        p250.setPlayerStatus($ps.getId());
+        insert(p250);
 
         System.out.println(String.format("Bought P250 for %s", $p.getName()));
 end
 
-rule "Buy SMG's for Half buy round CT for map CACHE"
+
+rule "Buy 2 grenades Eco round CT for map CACHE"
+    salience 98
     when
-        $ri: RoundInput(currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
-                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, $teammates: players)
-        $p: Player ( $a: armaments ) from $teammates
-        forall(
-               Armament( type != ArmamentType.SMG
-                         && type != ArmamentType.HEAVY
-                         && type != ArmamentType.RIFLE) from $a.list
-         )
+        $rn: Integer( )
+        $ri: Round( currentTeamState == BuyOptions.ECO, tactic == Tactic.OFFENSIVE,
+                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn )
+        $p: Player( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 2300 )
+        not( Armament( name == "Grenade", playerStatus ==  $ps.getId() ))
+        List( size < 2 ) from collect(Armament( name == "Grenade" ))
     then
-        Armament mp9 = (Armament) armaments.get("MP-9");
-        $p.setCash($p.getCash() - mp9.getPrice());
-        $p.getArmaments().getList().add(mp9);
-        update($ri)
+        Armament grenade = new Armament((Armament) armaments.get("Grenade"));
+
+        Integer newCash = $ps.getCash() - grenade.getPrice();
+        modify($ps) { setCash(newCash) }
+
+        grenade.setPlayerStatus($ps.getId());
+        insert(grenade);
+
+        System.out.println(String.format("Bought Grenade for %s", $p.getName()));
+end
+
+
+rule "Buy SMG's for Half buy round CT for map CACHE"
+    salience 97
+    when
+        $rn: Integer( )
+        $ri: Round(currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
+                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn )
+        $p: Player( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 1250 )
+        not( Armament( type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE,
+        playerStatus == $ps.getId()) )
+    then
+        Armament mp9 = new Armament((Armament) armaments.get("MP-9"));
+
+        Integer newCash = $ps.getCash() - mp9.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        mp9.setPlayerStatus($ps.getId());
+        insert(mp9);
 
         System.out.println(String.format("Bought MP-9 for %s", $p.getName()));
 end
 
-rule "Buy Rifle's for Full buy round CT for map CACHE"
+
+rule "Buy M4A1-S for Full buy round CT if has money for utilities"
+    salience 97
     when
-        $ri: RoundInput(currentTeamState == BuyOptions.FULL_BUY, tactic == Tactic.OFFENSIVE,
-                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, $teammates: players)
-        $p: Player ( $a: armaments ) from $teammates
-        forall(
-               Armament(type != ArmamentType.RIFLE) from $a.list
-         )
+        $rn: Integer( )
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.COUNTER_TERRORIST, number == $rn )
+        $p: Player ( )
+        $ps: PlayerStatus( round == $rn, player == $p.getName(), cash >=  3200 ) // can buy smoke if M4A1-S is bought
+        not( Armament( price >= 2700, playerStatus == $ps.getId() )) // don't have at least AK and more expensive
     then
-        Armament m4 = (Armament) armaments.get("M4A4");
-        $p.setCash($p.getCash() - m4.getPrice());
-        $p.getArmaments().getList().add(m4);
-        update($ri)
+        Armament m4a1 = new Armament((Armament) armaments.get("M4A4"));
+
+        Integer newCash = $ps.getCash() - m4a1.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        m4a1.setPlayerStatus($ps.getId());
+        insert(m4a1);
 
         System.out.println(String.format("Bought M4A4 for %s", $p.getName()));
 end
 
-rule "Buy TEC-9 Eco round T for map CACHE"
-    when
-        $ri: RoundInput(currentTeamState == BuyOptions.ECO, tactic == Tactic.OFFENSIVE,
-                        teamSide == Side.TERRORIST, map == Map.CACHE, $teammates: players )
-        $p: Player( $a: armaments ) from $teammates
-        exists(Armament( name == "Glock-18" ) from $a.list)
-    then
-        Armament tec9 = (Armament) armaments.get("Tec-9");
-        Armament glock = (Armament) armaments.get("Glock-18");
 
-        $p.setCash($p.getCash() - tec9.getPrice());
-        $p.getArmaments().getList().remove(glock);
-        $p.getArmaments().getList().add(tec9);
-        update($ri)
+rule "Buy Famas for Full buy round if M4A1-S is too expensive"
+    salience 96
+    when
+        $rn: Integer( )
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.COUNTER_TERRORIST, number == $rn )
+        $p: Player ( )
+        $ps: PlayerStatus( round == $rn, player == $p.getName(), cash >= 2350 ) // can buy smoke if M4A1-S is bought
+        not( Armament( price >= 2700, playerStatus == $ps.getId() )) // don't have at least AK and more expensive
+    then
+        Armament famas = new Armament((Armament) armaments.get("Famas"));
+
+        Integer newCash = $ps.getCash() - famas.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        famas.setPlayerStatus($ps.getId());
+        insert(famas);
+
+        System.out.println(String.format("Bought Famas for %s", $p.getName()));
+end
+
+
+rule "Buy TEC-9 for Eco round T for map CACHE"
+    salience 99
+    when
+        $rn: Integer( )
+        $ri: Round(currentTeamState == BuyOptions.ECO, tactic == Tactic.OFFENSIVE, teamSide == Side.TERRORIST,
+            map == Map.CACHE)
+        $p: Player( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 500 )
+        not( Armament( price >= 500, playerStatus == $ps.getId() ) )
+        $oldPistol: Armament( type == ArmamentType.PISTOL, playerStatus == $ps.getId() )
+    then
+        Armament tec9 = new Armament((Armament) armaments.get("Tec-9"));
+
+        Integer newCash = $ps.getCash() - tec9.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        tec9.setPlayerStatus($ps.getId());
+        insert(tec9);
 
         System.out.println(String.format("Bought Tec-9 for %s", $p.getName()));
 end
 
-rule "Buy MAC-10 Half buy round T for map CACHE"
-    when
-        $ri: RoundInput(currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
-                        teamSide == Side.TERRORIST, map == Map.CACHE, $teammates: players )
-        $p: Player( $a: armaments ) from $teammates
-                forall(
-                       Armament( type != ArmamentType.SMG
-                                 && type != ArmamentType.HEAVY
-                                 && type != ArmamentType.RIFLE) from $a.list
-                 )
-    then
-        Armament mac = (Armament) armaments.get("MAC-10");
 
-        $p.setCash($p.getCash() - mac.getPrice());
-        $p.getArmaments().getList().add(mac);
-        update($ri)
+rule "Buy MAC-10 Half buy round T for map CACHE"
+    salience 97
+    when
+        $rn: Integer( )
+        $ri: Round(currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
+                        teamSide == Side.TERRORIST, map == Map.CACHE )
+        $p: Player( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 1050 )
+        not( Armament( type != ArmamentType.PISTOL, playerStatus == $ps.getId() ))
+    then
+        Armament mac = new Armament((Armament) armaments.get("MAC-10"));
+
+        Integer newCash = $ps.getCash() - mac.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        mac.setPlayerStatus($ps.getId());
+        insert(mac);
 
         System.out.println(String.format("Bought MAC-10 for %s", $p.getName()));
 end
 
+
 rule "Buy Rifle's for Full buy round T for map CACHE"
+    salience 97
     when
-        $ri: RoundInput(currentTeamState == BuyOptions.FULL_BUY, tactic == Tactic.OFFENSIVE,
-                        teamSide == Side.TERRORIST, map == Map.CACHE, $teammates: players)
-        $p: Player ( $a: armaments ) from $teammates
-        forall(
-               Armament(type != ArmamentType.RIFLE) from $a.list
-         )
+        $rn: Integer( )
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.TERRORIST)
+        $p: Player ( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 3000 ) // buy galil if cash < 3000
+        not( Armament( price >= 2700 ) )
     then
-        Armament ak = (Armament) armaments.get("AK-47");
-        $p.setCash($p.getCash() - ak.getPrice());
-        $p.getArmaments().getList().add(ak);
-        update($ri)
+        Armament ak = new Armament((Armament) armaments.get("AK-47"));
+
+        Integer newCash = $ps.getCash() - ak.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        ak.setPlayerStatus($ps.getId());
+        insert(ak);
 
         System.out.println(String.format("Bought AK-47 for %s", $p.getName()));
 end
-*/
