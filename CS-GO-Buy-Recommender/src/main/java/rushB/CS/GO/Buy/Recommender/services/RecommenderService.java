@@ -2,6 +2,8 @@ package rushB.CS.GO.Buy.Recommender.services;
 
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.QueryResults;
+import org.kie.api.runtime.rule.QueryResultsRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;
@@ -11,6 +13,7 @@ import rushB.CS.GO.Buy.Recommender.facts.PlayerStatus;
 import rushB.CS.GO.Buy.Recommender.facts.Round;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
@@ -55,19 +58,34 @@ public class RecommenderService {
         }
     }
 
-    public void recommendForRound(RoundInput roundInput) {
+    private HashMap<String, ArrayList<Armament>> queryArmaments(ArrayList<Player> players) {
+        HashMap<String, ArrayList<Armament>> playerArmaments = new HashMap<>();
+
+        QueryResults results;
+        ArrayList<Armament> armaments;
+        for (Player p : players) {
+            results = session.getQueryResults("Extract players' armaments", p.getName());
+
+            armaments = new ArrayList<>();
+            for (QueryResultsRow row : results) {
+                armaments.add((Armament) row.get("$armaments"));
+            }
+            playerArmaments.put(p.getName(), armaments);
+        }
+
+        return playerArmaments;
+    }
+
+    public HashMap<String, ArrayList<Armament>> recommendForRound(RoundInput roundInput) {
         prepareSession(roundInput);
 
         session.fireAllRules();
 
-        for (Object o : this.session.getObjects()) {
-            if (o.getClass().equals(Armament.class)) {
-                Armament a = (Armament) o;
-                System.out.println(String.format("%d : %s", a.getPlayerStatus(), a.getName()));
-            }
-        }
+        HashMap<String, ArrayList<Armament>> results = queryArmaments(roundInput.getPlayers());
 
         session.dispose();
         roundCounter++;
+
+        return results;
     }
 }

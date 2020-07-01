@@ -304,3 +304,9 @@ rule "Buy Rifle's for Full buy round T for map CACHE"
 
         System.out.println(String.format("Bought AK-47 for %s", $p.getName()));
 end
+
+query "Extract players' armaments" (String $playerName)
+    $rn: Integer( )
+    $ps: PlayerStatus( round == $rn, player == $playerName )
+    $armaments: Armament( playerStatus == $ps.getId() )
+end

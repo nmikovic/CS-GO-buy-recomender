@@ -9,6 +9,7 @@ import rushB.CS.GO.Buy.Recommender.facts.Armament;
 import rushB.CS.GO.Buy.Recommender.services.RecommenderService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @RestController
 public class RecommenderController {
@@ -16,8 +17,7 @@ public class RecommenderController {
     private RecommenderService recommenderService;
 
     @PostMapping("/recommend")
-    public ArrayList<ArrayList<Armament>> recommendForRound(@RequestBody RoundInput roundInput) {
-        this.recommenderService.recommendForRound(roundInput);
-        return null;
+    public HashMap<String, ArrayList<Armament>> recommendForRound(@RequestBody RoundInput roundInput) {
+        return recommenderService.recommendForRound(roundInput);
     }
 }
