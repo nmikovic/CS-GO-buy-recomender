@@ -179,6 +179,110 @@ rule "Buy 2 grenades Eco round CT for map CACHE"
 end
 
 
+rule "Buy HE grenade"
+    salience 93
+    when
+        $rn: Integer ()
+        $ri: Round (currentTeamState == BuyOptions.FULL_BUY ||  currentTeamState == BuyOptions.HALF_BUY,
+                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $p: Player()
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 300)
+        Number( intValue < 3 ) from accumulate(
+                    Armament( playerStatus ==  $ps.getId(), $a: this, type == ArmamentType.GRENADE ),
+                    count($a))
+        not( Armament( name == "Grenade", playerStatus ==  $ps.getId() ))
+    then
+        Armament grenade = new Armament((Armament) armaments.get("Grenade"));
+
+        Integer newCash = $ps.getCash() - grenade.getPrice();
+        modify($ps) { setCash(newCash) }
+
+        grenade.setPlayerStatus($ps.getId());
+        insert(grenade);
+
+        System.out.println(String.format("Bought Grenade for %s", $p.getName()));
+
+end
+
+
+
+rule "Buy Smoke grenade"
+    salience 92
+    when
+        $rn: Integer ()
+        $ri: Round (currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.DEFENSIVE,
+                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $p: Player()
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 300)
+        Number( intValue < 3 ) from accumulate(
+                Armament( playerStatus ==  $ps.getId(), $a: this, type == ArmamentType.GRENADE ),
+                count($a))
+        not( Armament( name == "Smoke Grenade", playerStatus ==  $ps.getId() ))
+    then
+        Armament smoke = new Armament((Armament) armaments.get("Smoke Grenade"));
+
+        Integer newCash = $ps.getCash() - smoke.getPrice();
+        modify($ps) { setCash(newCash) }
+
+        smoke.setPlayerStatus($ps.getId());
+        insert(smoke);
+
+        System.out.println(String.format("Bought Smoke Grenade for %s", $p.getName()));
+
+end
+
+rule "Buy  Incendiary grenade"
+    salience 92
+    when
+        $rn: Integer ()
+        $ri: Round (currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY , tactic == Tactic.OFFENSIVE,
+                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $p: Player()
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 600)
+        Number( intValue < 3 ) from accumulate(
+                     Armament(playerStatus ==  $ps.getId(), $a: this, type == ArmamentType.GRENADE ),
+                     count($a))
+        not( Armament( name == "Incendiary Grenade", playerStatus ==  $ps.getId() ))
+    then
+        Armament fire = new Armament((Armament) armaments.get("Incendiary Grenade"));
+
+        Integer newCash = $ps.getCash() - fire.getPrice();
+        modify($ps) { setCash(newCash) }
+
+        fire.setPlayerStatus($ps.getId());
+        insert(fire);
+
+        System.out.println(String.format("Bought Incendiary Grenade for %s", $p.getName()));
+
+end
+
+rule "Buy  Flash grenade"
+    salience 91
+    when
+        $rn: Integer ()
+        $ri: Round (currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY,
+                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $p: Player()
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 200)
+        Number( intValue < 3 ) from accumulate(
+                     Armament(playerStatus ==  $ps.getId(), $a: this, type == ArmamentType.GRENADE ),
+                     count($a))
+        Number( intValue < 2 ) from accumulate(
+                             Armament(playerStatus ==  $ps.getId(), $a: this, name == "Flash Bang" ),
+                             count($a))
+    then
+        Armament flash = new Armament((Armament) armaments.get("Flash Bang"));
+
+        Integer newCash = $ps.getCash() - flash.getPrice();
+        modify($ps) { setCash(newCash) }
+
+        flash.setPlayerStatus($ps.getId());
+        insert(flash);
+
+        System.out.println(String.format("Bought Flash Bang for %s", $p.getName()));
+
+end
+
 rule "Buy SMG's for Half buy round CT for map CACHE"
     salience 97
     when
@@ -201,9 +305,70 @@ rule "Buy SMG's for Half buy round CT for map CACHE"
         System.out.println(String.format("Bought MP-9 for %s", $p.getName()));
 end
 
-
-rule "Buy M4A1-S for Full buy round CT if has money for utilities"
+rule "Buy AWP for Full buy"
     salience 97
+    when
+        $rn: Integer()
+        $ri: Round (currentTeamState == BuyOptions.FULL_BUY, number == $rn)
+        Number( intValue == 0 ) from accumulate (
+                Armament( $a: this, name == "AWP"),
+                count($a))
+        $maxCash: Number() from accumulate (PlayerStatus(round == $rn, $cash: cash), max($cash))
+        $ps: PlayerStatus(cash == $maxCash && cash >= 4750, round == $rn)
+        $p: Player(name == $ps.getPlayer())
+    then
+        Armament awp = new Armament((Armament) armaments.get("AWP"));
+        Integer newCash = $ps.getCash() - awp.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        awp.setPlayerStatus($ps.getId());
+        insert(awp);
+
+        System.out.println(String.format("Bought AWP for %s", $p.getName()));
+end
+
+rule "Drop cheaper weapon"
+    salience 95
+    when
+        $rn: Integer()
+        $ri: Round (currentTeamState == BuyOptions.FULL_BUY, number == $rn)
+        $p: Player()
+        $ps: PlayerStatus(round == $rn, player == $p.getName())
+        Number( intValue == 2 ) from accumulate (
+               Armament( $a: this, playerStatus == $ps.getId(), type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE),
+               count($a))
+        $c: Number() from accumulate( Armament (playerStatus == $ps.getId(), type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE, $price: price),
+                        min($price))
+        $Arm: Armament(price == $c, playerStatus == $ps.getId())
+    then
+        delete($Arm)
+        System.out.println(String.format("Dropped %s from %s",$Arm.getName(), $p.getName()));
+end
+
+rule "Buy defuse kit"
+    salience 94
+    when
+        $rn: Integer()
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY, number == $rn,
+                    teamSide == Side.COUNTER_TERRORIST)
+        Number( intValue < 3 ) from accumulate (
+                        Armament( $a: this, name == "Defuse Kit"),
+                        count($a))
+        $p: Player()
+        $ps: PlayerStatus(round == $rn, player == $p.getName(), cash >= 400)
+        not( Armament(playerStatus == $ps.getId(), name == "Defuse Kit") )
+    then
+        Armament def = new Armament((Armament) armaments.get("Defuse Kit"));
+        Integer newCash = $ps.getCash() - def.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        def.setPlayerStatus($ps.getId());
+        insert(def);
+
+        System.out.println(String.format("Bought Defuse Kit for %s", $p.getName()));
+end
+rule "Buy M4A1-S for Full buy round CT if has money for utilities"
+    salience 96
     when
         $rn: Integer( )
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.COUNTER_TERRORIST, number == $rn )
@@ -224,7 +389,7 @@ end
 
 
 rule "Buy Famas for Full buy round if M4A1-S is too expensive"
-    salience 96
+    salience 95
     when
         $rn: Integer( )
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.COUNTER_TERRORIST, number == $rn )
@@ -291,7 +456,7 @@ end
 
 
 rule "Buy Rifle's for Full buy round T for map CACHE"
-    salience 97
+    salience 96
     when
         $rn: Integer( )
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.TERRORIST)
