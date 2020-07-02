@@ -28,7 +28,10 @@ rule "Teammates' rank is lower than DMG first round"
         Integer( this == 1 || this == 16, $rn: this )
         Player( $name: name, rank < Rank.DISTINGUISHED_MASTER_GUARDIAN )
         $ps: PlayerStatus( player == $name, cash == 800, round == $rn )
-        List( size == 5 ) from collect(Player( rank < Rank.DISTINGUISHED_MASTER_GUARDIAN ))
+        Number( intValue == 5 ) from accumulate(
+            Player($p: this, rank < Rank.DISTINGUISHED_MASTER_GUARDIAN ),
+            count($p)
+        )
     then
         Armament kevlar = new Armament((Armament) armaments.get("Kevlar"));
 
@@ -161,7 +164,10 @@ rule "Buy 2 grenades Eco round CT for map CACHE"
         $p: Player( )
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 2300 )
         not( Armament( name == "Grenade", playerStatus ==  $ps.getId() ))
-        List( size < 2 ) from collect(Armament( name == "Grenade" ))
+        Number( intValue < 2 ) from accumulate(
+            Armament( $a: this, name == "Grenade" ),
+            count($a)
+        )
     then
         Armament grenade = new Armament((Armament) armaments.get("Grenade"));
 
