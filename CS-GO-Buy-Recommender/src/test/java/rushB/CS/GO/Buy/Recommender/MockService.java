@@ -50,7 +50,6 @@ public class MockService {
     }
 
     public ArrayList<PlayerStatus> returnPlayerStatuses(Integer round, Integer cash) {
-        // Integer id, String player, Integer round, Integer cash
         PlayerStatus ps1 = new PlayerStatus(0, "Player1", round, cash);
         PlayerStatus ps2 = new PlayerStatus(1, "Player2", round, cash);
         PlayerStatus ps3 = new PlayerStatus(2, "Player3", round, cash);
@@ -71,13 +70,13 @@ public class MockService {
         Armament usp1 = new Armament(armaments.get("USP-S"));
         usp1.setPlayerStatus(0);
         Armament usp2 = new Armament(armaments.get("USP-S"));
-        usp1.setPlayerStatus(1);
+        usp2.setPlayerStatus(1);
         Armament usp3 = new Armament(armaments.get("USP-S"));
-        usp1.setPlayerStatus(2);
+        usp3.setPlayerStatus(2);
         Armament usp4 = new Armament(armaments.get("USP-S"));
-        usp1.setPlayerStatus(3);
+        usp4.setPlayerStatus(3);
         Armament usp5 = new Armament(armaments.get("USP-S"));
-        usp1.setPlayerStatus(4);
+        usp5.setPlayerStatus(4);
 
         ArrayList<Armament> usps = new ArrayList<>();
         usps.add(usp1);
@@ -87,5 +86,27 @@ public class MockService {
         usps.add(usp5);
 
         return usps;
+    }
+
+    public ArrayList<Armament> createGlocks() {
+        Armament glock1 = new Armament(armaments.get("Glock-18"));
+        glock1.setPlayerStatus(0);
+        Armament glock2 = new Armament(armaments.get("Glock-18"));
+        glock2.setPlayerStatus(1);
+        Armament glock3 = new Armament(armaments.get("Glock-18"));
+        glock3.setPlayerStatus(2);
+        Armament glock4 = new Armament(armaments.get("Glock-18"));
+        glock4.setPlayerStatus(3);
+        Armament glock5 = new Armament(armaments.get("Glock-18"));
+        glock5.setPlayerStatus(4);
+
+        ArrayList<Armament> glocks = new ArrayList<>();
+        glocks.add(glock1);
+        glocks.add(glock2);
+        glocks.add(glock3);
+        glocks.add(glock4);
+        glocks.add(glock5);
+
+        return glocks;
     }
 }
