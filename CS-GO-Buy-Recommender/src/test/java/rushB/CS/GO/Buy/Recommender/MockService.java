@@ -66,6 +66,60 @@ public class MockService {
         return playerStatuses;
     }
 
+
+    public ArrayList<PlayerStatus> returnPlayerStatusesFullCash(Integer round) {
+        PlayerStatus ps1 = new PlayerStatus(0, "Player1", round, 16000);
+        PlayerStatus ps2 = new PlayerStatus(1, "Player2", round, 16000);
+        PlayerStatus ps3 = new PlayerStatus(2, "Player3", round, 16000);
+        PlayerStatus ps4 = new PlayerStatus(3, "Player4", round, 16000);
+        PlayerStatus ps5 = new PlayerStatus(4, "Player5", round, 16000);
+
+        ArrayList<PlayerStatus> playerStatuses = new ArrayList<>();
+        playerStatuses.add(ps1);
+        playerStatuses.add(ps2);
+        playerStatuses.add(ps3);
+        playerStatuses.add(ps4);
+        playerStatuses.add(ps5);
+
+        return playerStatuses;
+    }
+
+
+    public ArrayList<PlayerStatus> returnPlayerStatusesFullTeamGrenade(Integer round) {
+        PlayerStatus ps1 = new PlayerStatus(0, "Player1", round, 4200);
+        PlayerStatus ps2 = new PlayerStatus(1, "Player2", round, 4800);
+        PlayerStatus ps3 = new PlayerStatus(2, "Player3", round, 4800);
+        PlayerStatus ps4 = new PlayerStatus(3, "Player4", round, 4800);
+        PlayerStatus ps5 = new PlayerStatus(4, "Player5", round, 4480);
+
+        ArrayList<PlayerStatus> playerStatuses = new ArrayList<>();
+        playerStatuses.add(ps1);
+        playerStatuses.add(ps2);
+        playerStatuses.add(ps3);
+        playerStatuses.add(ps4);
+        playerStatuses.add(ps5);
+
+        return playerStatuses;
+    }
+
+    public ArrayList<PlayerStatus> returnPlayerStatusesForOneFireGrenade(Integer round) {
+        PlayerStatus ps1 = new PlayerStatus(0, "Player1", round, 3800);
+        PlayerStatus ps2 = new PlayerStatus(1, "Player2", round, 3800);
+        PlayerStatus ps3 = new PlayerStatus(2, "Player3", round, 3800);
+        PlayerStatus ps4 = new PlayerStatus(3, "Player4", round, 3800);
+        PlayerStatus ps5 = new PlayerStatus(4, "Player5", round, 4480);
+
+        ArrayList<PlayerStatus> playerStatuses = new ArrayList<>();
+        playerStatuses.add(ps1);
+        playerStatuses.add(ps2);
+        playerStatuses.add(ps3);
+        playerStatuses.add(ps4);
+        playerStatuses.add(ps5);
+
+        return playerStatuses;
+    }
+
+
     public ArrayList<Armament> createUSPs() {
         Armament usp1 = new Armament(armaments.get("USP-S"));
         usp1.setPlayerStatus(0);
@@ -86,6 +140,41 @@ public class MockService {
         usps.add(usp5);
 
         return usps;
+    }
+
+    public ArrayList<Armament> createArmamentWithSomeRifles(){
+        Armament usp1 = new Armament(armaments.get("USP-S"));
+        Armament rifle1 = new Armament(armaments.get("M4A1-S"));
+        usp1.setPlayerStatus(0);
+        rifle1.setPlayerStatus(0);
+
+
+        Armament usp2 = new Armament(armaments.get("USP-S"));
+        usp2.setPlayerStatus(1);
+
+
+        Armament usp3 = new Armament(armaments.get("USP-S"));
+        Armament rifle3 = new Armament(armaments.get("M4A1-S"));
+        usp3.setPlayerStatus(2);
+        rifle3.setPlayerStatus(2);
+
+        Armament usp4 = new Armament(armaments.get("USP-S"));
+        usp4.setPlayerStatus(3);
+
+
+        Armament usp5 = new Armament(armaments.get("USP-S"));
+        usp5.setPlayerStatus(4);
+
+        ArrayList<Armament> weapons = new ArrayList<>();
+        weapons.add(usp1);
+        weapons.add(rifle1);
+        weapons.add(rifle3);
+        weapons.add(usp2);
+        weapons.add(usp3);
+        weapons.add(usp4);
+        weapons.add(usp5);
+
+        return weapons;
     }
 
     public ArrayList<Armament> createGlocks() {

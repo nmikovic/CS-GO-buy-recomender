@@ -280,6 +280,83 @@ public class RulesTest {
                         .equals("AK-47")).count());
     }
 
+
+    //full buy awp
+    @Test
+    public void FULL_BUY_AWP(){
+        session.insert(2);
+        mockService.returnPlayersLowerThanDMG().forEach(p -> session.insert(p));
+
+        Round round = new Round(2, Side.COUNTER_TERRORIST, null, null, null, Tactic.OFFENSIVE, null, null, Map.CACHE);
+        session.insert(round);
+
+        mockService.returnPlayerStatusesFullCash(2).forEach(ps -> session.insert(ps));
+        mockService.createArmamentWithSomeRifles().forEach(weapon -> session.insert(weapon));
+
+        session.fireAllRules();
+
+        assertEquals(1, session.getObjects().stream().filter(o -> o.getClass().equals(Armament.class)
+        && ((Armament) o).getName().equals("AWP")).count());
+
+
+    }
+
+    //3 def kits
+    @Test
+    public void BUY_DEFKITS (){
+        session.insert(2);
+        mockService.returnPlayersLowerThanDMG().forEach(p -> session.insert(p));
+
+        Round round = new Round(2, Side.COUNTER_TERRORIST, null, null, null, Tactic.OFFENSIVE, null, null, Map.CACHE);
+        session.insert(round);
+
+        mockService.returnPlayerStatusesFullCash(2).forEach(ps -> session.insert(ps));
+        mockService.createArmamentWithSomeRifles().forEach(weapon -> session.insert(weapon));
+
+        session.fireAllRules();
+
+        assertEquals(3, session.getObjects().stream().filter(o -> o.getClass().equals(Armament.class)
+                && ((Armament) o).getName().equals("Defuse Kit")).count());
+
+
+    }
+
+    @Test
+    public void BUY_FULL_TEAM_GRENADE (){
+        session.insert(2);
+        mockService.returnPlayersLowerThanDMG().forEach(p -> session.insert(p));
+
+        Round round = new Round(2, Side.COUNTER_TERRORIST, null, null, null, Tactic.OFFENSIVE, null, null, Map.CACHE);
+        session.insert(round);
+
+        mockService.returnPlayerStatusesFullTeamGrenade(2).forEach(ps -> session.insert(ps));
+        mockService.createArmamentWithSomeRifles().forEach(weapon -> session.insert(weapon));
+
+        session.fireAllRules();
+
+        assertEquals(5, session.getObjects().stream().filter(o -> o.getClass().equals(Armament.class)
+                && ((Armament) o).getName().equals("Grenade")).count());
+
+
+    }
+
+   /* @Test 
+    public void BUY_ONE_FIRE_GRENADE (){
+        session.insert(2);
+        mockService.returnPlayersLowerThanDMG().forEach(p -> session.insert(p));
+
+        Round round = new Round(2, Side.COUNTER_TERRORIST, null, null, null, Tactic.OFFENSIVE, null, null, Map.CACHE);
+        session.insert(round);
+
+        mockService.returnPlayerStatusesForOneFireGrenade(2).forEach(ps -> session.insert(ps));
+        mockService.createArmamentWithSomeRifles().forEach(weapon -> session.insert(weapon));
+
+        session.fireAllRules();
+
+       // assertEquals(1, session.getObjects().stream().filter(o -> o.getClass().equals(Armament.class)
+       //         && ((Armament) o).getName().equals("Grenade")).count());
+    }
+*/
     @Test
     public void test_query() {
         session.insert(2); // set round number
