@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import rushB.CS.GO.Buy.Recommender.facts.Weapon;
 
 global HashMap<String, Armament> armaments;
-global Map map;
-global HashMap<String, Player> players;
+
 
 rule "Teammates' rank is lower than DMG first round"
     when
@@ -62,7 +61,6 @@ rule "Determine if ECO" extends "Determine team state"
         modify($r){ setCurrentTeamState(BuyOptions.ECO) }
         System.out.println("Team should go ECO");
 end
-
 
 rule "Determine if HALF BUY" extends "Determine team state"
     when

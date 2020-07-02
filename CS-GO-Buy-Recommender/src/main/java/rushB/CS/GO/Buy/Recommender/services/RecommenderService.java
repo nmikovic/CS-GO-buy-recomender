@@ -29,7 +29,6 @@ public class RecommenderService {
     private void prepareSession(RoundInput roundInput) {
         session = kieContainer.newKieSession();
         session.setGlobal("armaments", armaments);
-        session.setGlobal("map", roundInput.getMap());
         session.insert(roundCounter);
 
         for (Player p : roundInput.getPlayers())

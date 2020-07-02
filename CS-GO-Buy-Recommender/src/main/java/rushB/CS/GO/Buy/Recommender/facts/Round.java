@@ -11,12 +11,13 @@ public class Round {
     private Tactic tactic;
     private BuyOptions currentTeamState;
     private Boolean opponentHasAWP;
+    private Map map;
 
     public Round() {
     }
 
-    public Round(Integer number, Side teamSide, Boolean wonPreviousRound, BuyOptions previousTeamState,
-                 BuyOptions previousOpponentsState, Tactic tactic, BuyOptions currentTeamState, Boolean opponentHasAWP) {
+    public Round(Integer number, Side teamSide, Boolean wonPreviousRound, BuyOptions previousTeamState, BuyOptions previousOpponentsState, Tactic tactic, BuyOptions currentTeamState, Boolean opponentHasAWP, Map map) {
+        this.number = number;
         this.teamSide = teamSide;
         this.wonPreviousRound = wonPreviousRound;
         this.previousTeamState = previousTeamState;
@@ -24,6 +25,7 @@ public class Round {
         this.tactic = tactic;
         this.currentTeamState = currentTeamState;
         this.opponentHasAWP = opponentHasAWP;
+        this.map = map;
     }
 
     public Round(RoundInput roundInput, Integer currentRound) {
@@ -35,6 +37,15 @@ public class Round {
         this.tactic = roundInput.getTactic();
         this.currentTeamState = roundInput.getCurrentTeamState();
         this.opponentHasAWP = roundInput.getOpponentHasAWP();
+        this.map = roundInput.getMap();
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
     }
 
     public Integer getNumber() {
