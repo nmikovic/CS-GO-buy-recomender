@@ -11,7 +11,8 @@ import rushB.CS.GO.Buy.Recommender.utils.Utilities;
 @Configuration
 public class KieContainerConfiguration {
     @Bean
-    public KieContainer kieContainer() {
+    public KieContainer kieContainer() throws MavenInvocationException {
+        Utilities.mavenCleanAndInstall();
         KieServices ks = KieServices.Factory.get();
         KieContainer kContainer = ks
                 .newKieContainer(ks.newReleaseId("rushB", "Rules", "1.0-SNAPSHOT"));

@@ -3,10 +3,8 @@ package rushB.CS.GO.Buy.Recommender.utils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.maven.shared.invoker.*;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 import rushB.CS.GO.Buy.Recommender.facts.Armament;
 import rushB.CS.GO.Buy.Recommender.facts.ArmamentType;
 import rushB.CS.GO.Buy.Recommender.facts.Side;
@@ -67,6 +65,7 @@ public class Utilities {
         request.setGoals(Arrays.asList("clean", "install"));
 
         Invoker invoker = new DefaultInvoker();
+        invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
         invoker.execute(request);
     }
 
