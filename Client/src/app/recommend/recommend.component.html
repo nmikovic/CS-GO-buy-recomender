@@ -1,1 +1,141 @@
-<p>recommend works!</p>
+<mat-vertical-stepper #stepper>
+  <mat-step [stepControl]="defaultData">
+    <form [formGroup]="defaultData">
+      <ng-template matStepLabel>Fill out default data</ng-template>
+
+      <mat-form-field>
+        <input matInput formControlName="mapName" placeholder="Insert map name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Team side</mat-label>
+        <input matInput formControlName="teamSide" placeholder="Insert team side">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Tactic</mat-label>
+        <input matInput formControlName="tactic" placeholder="Insert tactic">
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="firstPlayerData">
+    <form [formGroup]="firstPlayerData">
+      <ng-template matStepLabel>Fill data for first player</ng-template>
+
+      <mat-form-field>
+        <input matInput formControlName="rank" placeholder="Insert player rank">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="armament" placeholder="Insert player armament">
+      </mat-form-field>
+
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondPlayerData">
+    <form [formGroup]="secondPlayerData">
+      <ng-template matStepLabel>Fill data for second player</ng-template>
+
+      <mat-form-field>
+        <input matInput formControlName="rank" placeholder="Insert player rank">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="armament" placeholder="Insert player armament">
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+
+  <mat-step [stepControl]="thirdPlayerData">
+    <form [formGroup]="thirdPlayerData">
+      <ng-template matStepLabel>Fill data for third player</ng-template>
+
+      <mat-form-field>
+        <input matInput formControlName="rank" placeholder="Insert player rank">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="armament" placeholder="Insert player armament">
+      </mat-form-field>
+
+    </form>
+  </mat-step>
+
+
+  <mat-step [stepControl]="fourthPlayerData">
+    <form [formGroup]="fourthPlayerData">
+      <ng-template matStepLabel>Fill data for fourth player</ng-template>
+
+      <mat-form-field>
+        <input matInput formControlName="rank" placeholder="Insert player rank">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="armament" placeholder="Insert player armament">
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+
+  <mat-step [stepControl]="fifthPlayerData">
+    <form [formGroup]="fifthPlayerData">
+      <ng-template matStepLabel>Fill data for fifth player</ng-template>
+
+      <mat-form-field>
+        <input matInput formControlName="rank" placeholder="Insert player rank">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="armament" placeholder="Insert player armament">
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <button mat-button>Recommend</button>
+  </mat-step>
+
+</mat-vertical-stepper>

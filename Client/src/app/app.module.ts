@@ -18,6 +18,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
 import { TextEditorComponent } from './add-new-rule/text-editor/text-editor.component';
 import {MatInputModule} from '@angular/material/input';
+import {MatStepperModule} from '@angular/material/stepper';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 export function getHighlightLanguages() {
   return {
@@ -45,7 +47,10 @@ export function getHighlightLanguages() {
     HttpClientModule,
     MatListModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [
     {
