@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
+@CrossOrigin
 public class RulesController {
     @Autowired
     private RulesService rulesService;
