@@ -1,22 +1,29 @@
 package rushB.CS.GO.Buy.Recommender.services;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.drools.core.io.impl.ReaderResource;
 import org.drools.verifier.Verifier;
 import org.drools.verifier.builder.VerifierBuilder;
 import org.drools.verifier.builder.VerifierBuilderFactory;
 import org.kie.api.io.ResourceType;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import rushB.CS.GO.Buy.Recommender.dtos.RulesDTO;
 import rushB.CS.GO.Buy.Recommender.exceptions.RulesException;
 import rushB.CS.GO.Buy.Recommender.utils.Utilities;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RulesService {
@@ -47,6 +54,23 @@ public class RulesService {
         return "Rules created";
     }
 
+    public ArrayList<String> getFactClasses() {
+        Reflections reflections = new Reflections("rushB.CS.GO.Buy.Recommender.facts", new SubTypesScanner(false));
+
+        ArrayList<String> types = (ArrayList<String>) reflections.getSubTypesOf(Object.class).stream()
+                .map(c -> c.getName().replace("rushB.CS.GO.Buy.Recommender.facts.", "")).collect(Collectors.toList());
+        types.addAll(reflections.getSubTypesOf(Enum.class).stream()
+                .map(e -> e.getName().replace("rushB.CS.GO.Buy.Recommender.facts.", "")).collect(Collectors.toList()));
+
+        return types;
+    }
+
+    public String getFactContent(String name) throws IOException {
+        File f = new File("../CS-GO-Buy-Recommender/src/main/java/rushB/CS/GO/Buy/Recommender/facts/" + name + ".java");
+
+        return FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+    }
+
     private boolean verifyRules(String rules, Verifier verifier) {
         verifier.addResourcesToVerify(new ReaderResource(new StringReader(rules)), ResourceType.DRL);
 
@@ -58,22 +82,9 @@ public class RulesService {
                 "dialect  \"java\"\n" +
                 "\n" +
                 "import java.util.ArrayList;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Armament;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.ArmamentType;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Side;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Player;\n" +
-                "import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Player;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Rank;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Tactic;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.BuyOptions;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Map;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Round;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.PlayerStatus;\n" +
+                "import rushB.CS.GO.Buy.Recommender.facts.*;\n" +
                 "import java.util.HashMap;\n" +
                 "import java.util.List;\n" +
-                "import java.util.ArrayList;\n" +
-                "import rushB.CS.GO.Buy.Recommender.facts.Weapon;\n" +
                 "\n" +
                 "global HashMap<String, Armament> armaments;";
     }

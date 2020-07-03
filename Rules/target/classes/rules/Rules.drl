@@ -2,22 +2,9 @@ package rules;
 dialect  "java"
 
 import java.util.ArrayList;
-import rushB.CS.GO.Buy.Recommender.facts.Armament;
-import rushB.CS.GO.Buy.Recommender.facts.ArmamentType;
-import rushB.CS.GO.Buy.Recommender.facts.Side;
-import rushB.CS.GO.Buy.Recommender.facts.Player;
-import rushB.CS.GO.Buy.Recommender.dtos.RoundInput;
-import rushB.CS.GO.Buy.Recommender.facts.Player;
-import rushB.CS.GO.Buy.Recommender.facts.Rank;
-import rushB.CS.GO.Buy.Recommender.facts.Tactic;
-import rushB.CS.GO.Buy.Recommender.facts.BuyOptions;
-import rushB.CS.GO.Buy.Recommender.facts.Map;
-import rushB.CS.GO.Buy.Recommender.facts.Round;
-import rushB.CS.GO.Buy.Recommender.facts.PlayerStatus;
+import rushB.CS.GO.Buy.Recommender.facts.*;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
-import rushB.CS.GO.Buy.Recommender.facts.Weapon;
 
 global HashMap<String, Armament> armaments;
 
