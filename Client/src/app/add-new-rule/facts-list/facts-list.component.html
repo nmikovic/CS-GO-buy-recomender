@@ -1,0 +1,6 @@
+<mat-form-field appearance="fill">
+  <mat-label>Fact</mat-label>
+  <mat-select (selectionChange)="selectFact($event)">
+    <mat-option *ngFor="let fact of facts" [value]="fact">{{fact}}</mat-option>
+  </mat-select>
+</mat-form-field>
