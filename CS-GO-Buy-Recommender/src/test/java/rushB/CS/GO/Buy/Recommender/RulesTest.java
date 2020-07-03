@@ -340,8 +340,8 @@ public class RulesTest {
 
     }
 
-   /* @Test 
-    public void BUY_ONE_FIRE_GRENADE (){
+    @Test
+    public void BUY_THREE_FIRE_GRENADES (){
         session.insert(2);
         mockService.returnPlayersLowerThanDMG().forEach(p -> session.insert(p));
 
@@ -353,10 +353,27 @@ public class RulesTest {
 
         session.fireAllRules();
 
-       // assertEquals(1, session.getObjects().stream().filter(o -> o.getClass().equals(Armament.class)
-       //         && ((Armament) o).getName().equals("Grenade")).count());
+       assertEquals(3, session.getObjects().stream().filter(o -> o.getClass().equals(Armament.class)
+               && ((Armament) o).getName().equals("Incendiary Grenade")).count());
     }
-*/
+
+    @Test
+    public void BUY_FIVE_FLASH_BANGS (){
+        session.insert(2);
+        mockService.returnPlayersLowerThanDMG().forEach(p -> session.insert(p));
+
+        Round round = new Round(2, Side.COUNTER_TERRORIST, null, null, null, Tactic.OFFENSIVE, null, null, Map.CACHE);
+        session.insert(round);
+
+        mockService.returnPlayerStatusesForOneFireGrenade(2).forEach(ps -> session.insert(ps));
+        mockService.createArmamentWithSomeRifles().forEach(weapon -> session.insert(weapon));
+
+        session.fireAllRules();
+
+        assertEquals(5, session.getObjects().stream().filter(o -> o.getClass().equals(Armament.class)
+                && ((Armament) o).getName().equals("Flash Bang")).count());
+    }
+
     @Test
     public void test_query() {
         session.insert(2); // set round number

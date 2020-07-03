@@ -103,11 +103,11 @@ public class MockService {
     }
 
     public ArrayList<PlayerStatus> returnPlayerStatusesForOneFireGrenade(Integer round) {
-        PlayerStatus ps1 = new PlayerStatus(0, "Player1", round, 3800);
-        PlayerStatus ps2 = new PlayerStatus(1, "Player2", round, 3800);
-        PlayerStatus ps3 = new PlayerStatus(2, "Player3", round, 3800);
-        PlayerStatus ps4 = new PlayerStatus(3, "Player4", round, 3800);
-        PlayerStatus ps5 = new PlayerStatus(4, "Player5", round, 4480);
+        PlayerStatus ps1 = new PlayerStatus(0, "Player1", round, 3100);
+        PlayerStatus ps2 = new PlayerStatus(1, "Player2", round, 3100);
+        PlayerStatus ps3 = new PlayerStatus(2, "Player3", round, 3100);
+        PlayerStatus ps4 = new PlayerStatus(3, "Player4", round, 3100);
+        PlayerStatus ps5 = new PlayerStatus(4, "Player5", round, 3880);
 
         ArrayList<PlayerStatus> playerStatuses = new ArrayList<>();
         playerStatuses.add(ps1);
