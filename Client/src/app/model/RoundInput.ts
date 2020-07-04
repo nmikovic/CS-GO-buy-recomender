@@ -1,12 +1,11 @@
-import {Map as Mapa} from './Map';
+import {Map} from './Map';
 import {Side} from './Side';
 import {Player} from './Player';
-import {Armament} from './Armament';
 import {BuyOptions} from './BuyOptions';
 import {Tactic} from './Tactic';
 
 export interface RoundInput {
-  map: Mapa;
+  map: Map;
   teamSide: Side;
   players: Player[];
   armaments: {};
@@ -17,18 +16,4 @@ export interface RoundInput {
   tactic: Tactic;
   currentTeamState: BuyOptions;
   opponentHasAWP: boolean;
-
-  /*private Map map;
-  private Side teamSide;
-  private ArrayList<Player> players;
-  private HashMap<String, ArrayList<Armament>> armaments;
-  private HashMap<String, Integer> cash;
-  private Boolean wonPreviousRound;
-  private BuyOptions previousTeamState;
-  private BuyOptions previousOpponentsState;
-  private Tactic tactic;
-  private BuyOptions currentTeamState;
-
-  private Boolean opponentHasAWP;
-  */
 }

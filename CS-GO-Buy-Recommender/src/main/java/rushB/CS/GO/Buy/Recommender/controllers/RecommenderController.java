@@ -18,7 +18,7 @@ public class RecommenderController {
     private RecommenderService recommenderService;
 
     @PostMapping("/recommend")
-    public ResponseEntity<HashMap<String, ArrayList<Armament>>>recommendForRound(@RequestBody RoundInput roundInput) {
+    public ResponseEntity<HashMap<String, ArrayList<Armament>>> recommendForRound(@RequestBody RoundInput roundInput) {
 
         return new ResponseEntity<>(recommenderService.recommendForRound(roundInput), HttpStatus.OK);
     }
