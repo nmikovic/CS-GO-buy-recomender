@@ -18,6 +18,9 @@ import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
 import { TextEditorComponent } from './add-new-rule/text-editor/text-editor.component';
 import {MatInputModule} from '@angular/material/input';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {FormsModule} from '@angular/forms';
+import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
 
 export function getHighlightLanguages() {
   return {
@@ -45,7 +48,10 @@ export function getHighlightLanguages() {
     HttpClientModule,
     MatListModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    FlexLayoutModule,
+    FormsModule,
+    MatSnackBarModule
   ],
   providers: [
     {
@@ -54,7 +60,8 @@ export function getHighlightLanguages() {
         languages: getHighlightLanguages()
       }
     },
-    {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true},
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}}
   ],
   bootstrap: [AppComponent]
 })
