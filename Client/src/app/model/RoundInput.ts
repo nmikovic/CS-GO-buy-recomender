@@ -1,4 +1,4 @@
-import {MapEnum} from './Map';
+import {MapEnum} from './MapEnum';
 import {Side} from './Side';
 import {Player} from './Player';
 import {Armament} from './Armament';

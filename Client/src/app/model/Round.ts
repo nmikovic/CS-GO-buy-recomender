@@ -1,7 +1,7 @@
 import {Side} from './Side';
 import {BuyOptions} from './BuyOptions';
 import {Tactic} from './Tactic';
-import {MapEnum} from './Map';
+import {MapEnum} from './MapEnum';
 export interface Round {
   number: number;
   teamSide: Side;
