@@ -1,0 +1,4 @@
+<mat-form-field>
+  <mat-label>Write rules</mat-label>
+  <textarea (keydown)="checkIfTab($event)" matInput [(ngModel)]="rules.rules"></textarea>
+</mat-form-field>

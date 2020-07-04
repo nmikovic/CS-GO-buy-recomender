@@ -1,1 +1,10 @@
-<p>add-new-rule works!</p>
+<div fxLayout="row" fxLayoutGap="10%">
+  <div id="left" fxLayout="column" fxLayoutGap="1%">
+    <app-facts-list fxLayoutAlign="center"></app-facts-list>
+    <app-code-viewer></app-code-viewer>
+  </div>
+  <div id="right" fxLayout="column">
+    <app-text-editor #editor></app-text-editor>
+    <button mat-raised-button color="primary" (click)="editor.submitRules()">Create rules</button>
+  </div>
+</div>

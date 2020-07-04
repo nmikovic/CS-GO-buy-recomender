@@ -1,8 +1,5 @@
 package rushB.CS.GO.Buy.Recommender.facts;
 
-import org.kie.api.definition.type.PropertyReactive;
-
-@PropertyReactive
 public class PlayerStatus {
     private Integer id;
     private String player;

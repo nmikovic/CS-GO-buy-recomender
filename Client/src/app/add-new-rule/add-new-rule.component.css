@@ -1,0 +1,18 @@
+#left {
+  margin-top: 2%;
+  width: 43%;
+  margin-left: 2%;
+}
+
+#right {
+  margin-top: 2%;
+  width: 43%;
+  margin-right: 2%;
+}
+
+button {
+  width: 30%;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
