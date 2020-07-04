@@ -22,7 +22,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
-
+import { MatCardModule } from '@angular/material/card';
 
 export function getHighlightLanguages() {
   return {
@@ -55,7 +55,8 @@ export function getHighlightLanguages() {
     ReactiveFormsModule,
     FlexLayoutModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule
   ],
   providers: [
     {

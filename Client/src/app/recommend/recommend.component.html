@@ -1,7 +1,7 @@
 <mat-vertical-stepper #stepper>
   <mat-step [stepControl]="defaultData">
     <form [formGroup]="defaultData">
-      <ng-template matStepLabel>Fill out default data</ng-template>
+      <ng-template matStepLabel>Default data</ng-template>
 
       <mat-form-field>
         <mat-label>Map name</mat-label>
@@ -35,7 +35,7 @@
 
   <mat-step [stepControl]="firstPlayerData">
     <form [formGroup]="firstPlayerData">
-      <ng-template matStepLabel>Fill data for first player</ng-template>
+      <ng-template matStepLabel>First player</ng-template>
 
       <mat-form-field>
         <mat-label>Player rank</mat-label>
@@ -68,7 +68,7 @@
 
   <mat-step [stepControl]="secondPlayerData">
     <form [formGroup]="secondPlayerData">
-      <ng-template matStepLabel>Fill data for second player</ng-template>
+      <ng-template matStepLabel>Second player</ng-template>
 
       <mat-form-field>
         <mat-label>Player rank</mat-label>
@@ -101,7 +101,7 @@
 
   <mat-step [stepControl]="thirdPlayerData">
     <form [formGroup]="thirdPlayerData">
-      <ng-template matStepLabel>Fill data for third player</ng-template>
+      <ng-template matStepLabel>Third player</ng-template>
 
       <mat-form-field>
         <mat-label>Player rank</mat-label>
@@ -135,7 +135,7 @@
 
   <mat-step [stepControl]="fourthPlayerData">
     <form [formGroup]="fourthPlayerData">
-      <ng-template matStepLabel>Fill data for fourth player</ng-template>
+      <ng-template matStepLabel>Fourth player</ng-template>
 
       <mat-form-field>
         <mat-label>Player rank</mat-label>
@@ -168,7 +168,7 @@
 
   <mat-step [stepControl]="fifthPlayerData">
     <form [formGroup]="fifthPlayerData">
-      <ng-template matStepLabel>Fill data for fifth player</ng-template>
+      <ng-template matStepLabel>Fifth player</ng-template>
 
       <mat-form-field>
         <mat-label>Player rank</mat-label>
@@ -199,8 +199,26 @@
   </mat-step>
 
   <mat-step>
+    <ng-template matStepLabel>Recommend</ng-template>
     <button mat-button (click)="recommend()">Recommend</button>
   </mat-step>
 
 </mat-vertical-stepper>
 
+<div *ngIf="results != {}" fxLayout="row">
+  <mat-card *ngFor="let r of parseResults(results)" class = "card" >
+    <mat-card-header>
+      <mat-card-title>{{r}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let i of parseItems(r)">
+            <p>{{i.name}}: {{i.price | currency:'USD'}}</p>
+          </mat-list-item>
+        </mat-list>
+      <p>
+        Total:{{calculateTotal(r) | currency:'USD'}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

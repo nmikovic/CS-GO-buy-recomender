@@ -130,4 +130,18 @@ export class RecommendComponent implements OnInit {
 
   }
 
+  parseResults(results: any){
+    return Object.keys(results);
+  }
+
+  parseItems(r: any){
+    return this.results[r];
+  }
+  calculateTotal(r: any){
+    let total = 0;
+    this.results[r].forEach((w) => {
+      total += w.price;
+    });
+    return total;
+  }
 }

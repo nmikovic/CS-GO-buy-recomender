@@ -169,9 +169,9 @@ end
 rule "Buy HE grenade"
     salience 93
     when
-        $rn: Integer ()
-        $ri: Round (currentTeamState == BuyOptions.FULL_BUY ||  currentTeamState == BuyOptions.HALF_BUY,
-                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $rn: Integer()
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY ||  currentTeamState == BuyOptions.HALF_BUY,
+                    number == $rn)
         $p: Player()
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 300)
         Number( intValue < 3 ) from accumulate(
@@ -188,7 +188,6 @@ rule "Buy HE grenade"
         insert(grenade);
 
         System.out.println(String.format("Bought Grenade for %s", $p.getName()));
-
 end
 
 
@@ -196,9 +195,8 @@ end
 rule "Buy Smoke grenade"
     salience 92
     when
-        $rn: Integer ()
-        $ri: Round (currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.DEFENSIVE,
-                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $rn: Integer()
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY,tactic == Tactic.DEFENSIVE, number == $rn)
         $p: Player()
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 300)
         Number( intValue < 3 ) from accumulate(
@@ -215,15 +213,14 @@ rule "Buy Smoke grenade"
         insert(smoke);
 
         System.out.println(String.format("Bought Smoke Grenade for %s", $p.getName()));
-
 end
 
 rule "Buy  Incendiary grenade"
-    salience 92
+    salience 91
     when
-        $rn: Integer ()
-        $ri: Round (currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY , tactic == Tactic.OFFENSIVE,
-                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $rn: Integer()
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY , tactic == Tactic.OFFENSIVE,
+                    teamSide == Side.COUNTER_TERRORIST, number == $rn)
         $p: Player()
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 600)
         Number( intValue < 3 ) from accumulate(
@@ -240,15 +237,14 @@ rule "Buy  Incendiary grenade"
         insert(fire);
 
         System.out.println(String.format("Bought Incendiary Grenade for %s", $p.getName()));
-
 end
 
 rule "Buy  Flash grenade"
-    salience 91
+    salience 90
     when
-        $rn: Integer ()
-        $ri: Round (currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY,
-                    teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn)
+        $rn: Integer()
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
+                    number == $rn)
         $p: Player()
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 200)
         Number( intValue < 3 ) from accumulate(
@@ -267,7 +263,6 @@ rule "Buy  Flash grenade"
         insert(flash);
 
         System.out.println(String.format("Bought Flash Bang for %s", $p.getName()));
-
 end
 
 rule "Buy SMG's for Half buy round CT for map CACHE"
@@ -296,11 +291,11 @@ rule "Buy AWP for Full buy"
     salience 97
     when
         $rn: Integer()
-        $ri: Round (currentTeamState == BuyOptions.FULL_BUY, number == $rn)
-        Number( intValue == 0 ) from accumulate (
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY, number == $rn)
+        Number( intValue == 0 ) from accumulate(
                 Armament( $a: this, name == "AWP"),
                 count($a))
-        $maxCash: Number() from accumulate (PlayerStatus(round == $rn, $cash: cash), max($cash))
+        $maxCash: Number() from accumulate(PlayerStatus(round == $rn, $cash: cash), max($cash))
         $ps: PlayerStatus(cash == $maxCash && cash >= 4750, round == $rn)
         $p: Player(name == $ps.getPlayer())
     then
@@ -318,13 +313,13 @@ rule "Drop cheaper weapon"
     salience 95
     when
         $rn: Integer()
-        $ri: Round (currentTeamState == BuyOptions.FULL_BUY, number == $rn)
+        $ri: Round(currentTeamState == BuyOptions.FULL_BUY, number == $rn)
         $p: Player()
         $ps: PlayerStatus(round == $rn, player == $p.getName())
-        Number( intValue == 2 ) from accumulate (
+        Number( intValue == 2 ) from accumulate(
                Armament( $a: this, playerStatus == $ps.getId(), type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE),
                count($a))
-        $c: Number() from accumulate( Armament (playerStatus == $ps.getId(), type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE, $price: price),
+        $c: Number() from accumulate( Armament(playerStatus == $ps.getId(), type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE, $price: price),
                         min($price))
         $Arm: Armament(price == $c, playerStatus == $ps.getId())
     then
@@ -338,7 +333,7 @@ rule "Buy defuse kit"
         $rn: Integer()
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY, number == $rn,
                     teamSide == Side.COUNTER_TERRORIST)
-        Number( intValue < 3 ) from accumulate (
+        Number( intValue < 3 ) from accumulate(
                         Armament( $a: this, name == "Defuse Kit"),
                         count($a))
         $p: Player()
@@ -359,7 +354,7 @@ rule "Buy M4A1-S for Full buy round CT if has money for utilities"
     when
         $rn: Integer( )
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.COUNTER_TERRORIST, number == $rn )
-        $p: Player ( )
+        $p: Player( )
         $ps: PlayerStatus( round == $rn, player == $p.getName(), cash >=  3200 ) // can buy smoke if M4A1-S is bought
         not( Armament( price >= 2700, playerStatus == $ps.getId() )) // don't have at least AK and more expensive
     then
@@ -380,7 +375,7 @@ rule "Buy Famas for Full buy round if M4A1-S is too expensive"
     when
         $rn: Integer( )
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.COUNTER_TERRORIST, number == $rn )
-        $p: Player ( )
+        $p: Player( )
         $ps: PlayerStatus( round == $rn, player == $p.getName(), cash >= 2350 ) // can buy smoke if M4A1-S is bought
         not( Armament( price >= 2700, playerStatus == $ps.getId() )) // don't have at least AK and more expensive
     then
@@ -412,6 +407,7 @@ rule "Buy TEC-9 for Eco round T for map CACHE"
         Integer newCash = $ps.getCash() - tec9.getPrice();
         modify($ps){ setCash(newCash)}
 
+        delete($oldPistol);
         tec9.setPlayerStatus($ps.getId());
         insert(tec9);
 
@@ -447,7 +443,7 @@ rule "Buy Rifle's for Full buy round T for map CACHE"
     when
         $rn: Integer( )
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY, teamSide == Side.TERRORIST)
-        $p: Player ( )
+        $p: Player( )
         $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 3000 ) // buy galil if cash < 3000
         not( Armament( price >= 2700, playerStatus == $ps.getId() ) )
     then
