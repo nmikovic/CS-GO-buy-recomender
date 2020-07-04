@@ -198,7 +198,7 @@ public class RulesTest {
         Round round = new Round(2, Side.COUNTER_TERRORIST, null, null, null, Tactic.OFFENSIVE, null, null, Map.CACHE);
         session.insert(round); // insert round
 
-        mockService.returnPlayerStatuses(2, 3400).forEach(ps -> session.insert(ps)); // insert player statuses
+        mockService.returnPlayerStatuses(2, 3000).forEach(ps -> session.insert(ps)); // insert player statuses
         mockService.createUSPs().forEach(usp -> session.insert(usp));
 
         session.fireAllRules();
@@ -207,6 +207,25 @@ public class RulesTest {
                 .filter(o -> o.getClass().equals(Armament.class) && ((Armament) o).getName()
                         .equals("MP-9")).count());
     }
+
+    @Test
+    public void HALF_BUYAndCTAndCacheAndOffensive_buyMP5() {
+        session.insert(2); // set round number
+        mockService.returnPlayersLowerThanDMG().forEach(p -> session.insert(p)); // insert players
+
+        Round round = new Round(2, Side.COUNTER_TERRORIST, null, null, null, Tactic.OFFENSIVE, null, null, Map.CACHE);
+        session.insert(round); // insert round
+
+        mockService.returnPlayerStatuses(2, 3600).forEach(ps -> session.insert(ps)); // insert player statuses
+        mockService.createUSPs().forEach(usp -> session.insert(usp));
+
+        session.fireAllRules();
+
+        assertEquals(5, session.getObjects().stream()
+                .filter(o -> o.getClass().equals(Armament.class) && ((Armament) o).getName()
+                        .equals("MP5-SD")).count());
+    }
+
 
     @Test
     public void HALF_BUYAndTAndCacheAndOffensive_buyMAC_10() {

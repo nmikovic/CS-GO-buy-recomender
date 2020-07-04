@@ -1,11 +1,11 @@
 package rules;
-dialect  "java"
+dialect "java"
 
 import java.util.ArrayList;
 import rushB.CS.GO.Buy.Recommender.facts.*;
 import java.util.HashMap;
 import java.util.List;
-
+import java.lang.Math;
 global HashMap<String, Armament> armaments;
 
 
@@ -167,7 +167,7 @@ end
 
 
 rule "Buy HE grenade"
-    salience 93
+    salience 43
     when
         $rn: Integer()
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY ||  currentTeamState == BuyOptions.HALF_BUY,
@@ -193,7 +193,7 @@ end
 
 
 rule "Buy Smoke grenade"
-    salience 92
+    salience 42
     when
         $rn: Integer()
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY,tactic == Tactic.DEFENSIVE, number == $rn)
@@ -216,7 +216,7 @@ rule "Buy Smoke grenade"
 end
 
 rule "Buy  Incendiary grenade"
-    salience 91
+    salience 41
     when
         $rn: Integer()
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY , tactic == Tactic.OFFENSIVE,
@@ -240,7 +240,7 @@ rule "Buy  Incendiary grenade"
 end
 
 rule "Buy  Flash grenade"
-    salience 90
+    salience 40
     when
         $rn: Integer()
         $ri: Round(currentTeamState == BuyOptions.FULL_BUY || currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
@@ -265,17 +265,40 @@ rule "Buy  Flash grenade"
         System.out.println(String.format("Bought Flash Bang for %s", $p.getName()));
 end
 
-rule "Buy SMG's for Half buy round CT for map CACHE"
-    salience 97
+rule "Buy MP-5 for Half buy round CT for map CACHE"
+    salience (96 + ((int)Math.floor($cash/3500.0)))
     when
         $rn: Integer( )
         $ri: Round(currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
                         teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn )
         $p: Player( )
-        $ps: PlayerStatus( player == $p.getName(), round == $rn, cash >= 1250 )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, $cash: cash )
         not( Armament( type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE,
         playerStatus == $ps.getId()) )
     then
+        Armament mp5 = new Armament((Armament) armaments.get("MP5-SD"));
+
+        Integer newCash = $ps.getCash() - mp5.getPrice();
+        modify($ps){ setCash(newCash)}
+
+        mp5.setPlayerStatus($ps.getId());
+        insert(mp5);
+
+        System.out.println(String.format("Bought MP5-SD for %s", $p.getName()));
+end
+
+rule "Buy MP-9 for Half buy round CT for map CACHE"
+    salience (97 - ((int)Math.floor($cash/3500.0)))
+    when
+        $rn: Integer( )
+        $ri: Round(currentTeamState == BuyOptions.HALF_BUY, tactic == Tactic.OFFENSIVE,
+                        teamSide == Side.COUNTER_TERRORIST, map == Map.CACHE, number == $rn )
+        $p: Player( )
+        $ps: PlayerStatus( player == $p.getName(), round == $rn, $cash: cash )
+        not( Armament( type == ArmamentType.HEAVY || type == ArmamentType.SMG || type == ArmamentType.RIFLE,
+        playerStatus == $ps.getId()) )
+    then
+        System.out.println((97 - ((int)Math.floor($cash/2500.0))));
         Armament mp9 = new Armament((Armament) armaments.get("MP-9"));
 
         Integer newCash = $ps.getCash() - mp9.getPrice();
