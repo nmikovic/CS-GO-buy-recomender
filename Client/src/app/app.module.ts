@@ -20,6 +20,9 @@ import { TextEditorComponent } from './add-new-rule/text-editor/text-editor.comp
 import {MatInputModule} from '@angular/material/input';
 import {MatStepperModule} from '@angular/material/stepper';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 export function getHighlightLanguages() {
   return {
@@ -50,7 +53,9 @@ export function getHighlightLanguages() {
     MatInputModule,
     MatStepperModule,
     ReactiveFormsModule,
-    FormsModule
+    FlexLayoutModule,
+    FormsModule,
+    MatSnackBarModule
   ],
   providers: [
     {
@@ -59,7 +64,8 @@ export function getHighlightLanguages() {
         languages: getHighlightLanguages()
       }
     },
-    {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true},
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}}
   ],
   bootstrap: [AppComponent]
 })
