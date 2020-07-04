@@ -4,17 +4,31 @@
       <ng-template matStepLabel>Fill out default data</ng-template>
 
       <mat-form-field>
-        <input matInput formControlName="mapName" placeholder="Insert map name">
+        <mat-label>Map name</mat-label>
+        <mat-select formControlName="mapName">
+          <mat-option *ngFor="let m of maps" [value]="m">
+            {{m}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Team side</mat-label>
-        <input matInput formControlName="teamSide" placeholder="Insert team side">
+        <mat-select formControlName="teamSide">
+          <mat-option *ngFor="let ts of sides" [value]="ts">
+            {{ts}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
+
 
       <mat-form-field>
         <mat-label>Tactic</mat-label>
-        <input matInput formControlName="tactic" placeholder="Insert tactic">
+        <mat-select formControlName="tactic">
+          <mat-option *ngFor="let t of tactics" [value]="t">
+            {{t}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </form>
   </mat-step>
@@ -24,7 +38,12 @@
       <ng-template matStepLabel>Fill data for first player</ng-template>
 
       <mat-form-field>
-        <input matInput formControlName="rank" placeholder="Insert player rank">
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
@@ -36,7 +55,12 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="armament" placeholder="Insert player armament">
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
     </form>
@@ -47,7 +71,12 @@
       <ng-template matStepLabel>Fill data for second player</ng-template>
 
       <mat-form-field>
-        <input matInput formControlName="rank" placeholder="Insert player rank">
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
@@ -59,7 +88,12 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="armament" placeholder="Insert player armament">
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </form>
   </mat-step>
@@ -70,7 +104,12 @@
       <ng-template matStepLabel>Fill data for third player</ng-template>
 
       <mat-form-field>
-        <input matInput formControlName="rank" placeholder="Insert player rank">
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
@@ -82,7 +121,12 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="armament" placeholder="Insert player armament">
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
     </form>
@@ -94,7 +138,12 @@
       <ng-template matStepLabel>Fill data for fourth player</ng-template>
 
       <mat-form-field>
-        <input matInput formControlName="rank" placeholder="Insert player rank">
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
@@ -106,7 +155,12 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="armament" placeholder="Insert player armament">
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </form>
   </mat-step>
@@ -117,7 +171,12 @@
       <ng-template matStepLabel>Fill data for fifth player</ng-template>
 
       <mat-form-field>
-        <input matInput formControlName="rank" placeholder="Insert player rank">
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
@@ -129,7 +188,12 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="armament" placeholder="Insert player armament">
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </form>
   </mat-step>
@@ -139,3 +203,4 @@
   </mat-step>
 
 </mat-vertical-stepper>
+

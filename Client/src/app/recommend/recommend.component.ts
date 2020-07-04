@@ -6,6 +6,7 @@ import {Player} from '../model/Player';
 import {Armament} from '../model/Armament';
 import {ArmamentType} from '../model/ArmamentType';
 import {ApiService} from '../services/api.service';
+import {Rank} from '../model/Rank';
 
 @Component({
   selector: 'app-recommend',
@@ -13,14 +14,19 @@ import {ApiService} from '../services/api.service';
   styleUrls: ['./recommend.component.css']
 })
 export class RecommendComponent implements OnInit {
+  maps = ['CACHE', 'MIRAGE'];
+  ranks = Object.values(Rank).filter(r => typeof Rank[r as any] === 'number');
+  sides = ['COUNTER_TERRORIST', 'TERRORIST'];
+  tactics = [  'OFFENSIVE', 'DEFENSIVE'];
   defaultData: FormGroup;
   firstPlayerData: FormGroup;
   secondPlayerData: FormGroup;
   thirdPlayerData: FormGroup;
   fourthPlayerData: FormGroup;
   fifthPlayerData: FormGroup;
-  maps: string[] = ['CACHE', 'MIRAGE'];
   armamentMap: Map<string, Armament>;
+  armamentList: string[];
+  results = {};
 
   constructor(private formBuilder: FormBuilder, private apiService: ApiService) {
   }
@@ -29,7 +35,8 @@ export class RecommendComponent implements OnInit {
     this.apiService.getArmaments().subscribe({
       next: (armaments: Map<string, Armament>) => {
         this.armamentMap = armaments;
-        console.log(this.armamentMap['AK-47']);
+        this.armamentList = Object.keys(this.armamentMap);
+
       }
     });
     this.defaultData = this.formBuilder.group({
@@ -83,7 +90,6 @@ export class RecommendComponent implements OnInit {
       currentTeamState: null,
       opponentHasAWP: null,
     };
-
     const playerForms = [this.firstPlayerData, this.secondPlayerData, this.thirdPlayerData, this.fourthPlayerData, this.fifthPlayerData];
     const players = [];
     const cash = {};
@@ -101,23 +107,23 @@ export class RecommendComponent implements OnInit {
 
       // armament list
       const armament = [];
-      const armamentValues = form.controls.armament.value.split(',');
+      const armamentValues = form.controls.armament.value;
 
       armamentValues.forEach((weapon) => {
         armament.push(this.armamentMap[weapon]);
       });
 
-      armaments[form.controls.name.value] =  armament;
+      armaments[form.controls.name.value] = armament;
     });
     roundInput.players = players;
     roundInput.cash = cash;
     roundInput.armaments = armaments;
 
     console.log(JSON.stringify(roundInput));
-
     this.apiService.recommend(roundInput).subscribe({
       next: (result: Map<string, Armament[]>) => {
         console.log(result);
+        this.results = result;
       }
     });
 
