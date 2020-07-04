@@ -1,0 +1,14 @@
+.mat-form-field{
+  margin-right: 10px;
+  margin-left: 10px;
+  flex-direction: row;
+  margin-bottom: 0px;
+  width: 200px;
+}
+
+.card {
+  overflow: auto;
+  margin-left: 10px;
+  margin-right: 10px;
+
+}

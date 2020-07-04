@@ -1,1 +1,224 @@
-<p>recommend works!</p>
+<mat-vertical-stepper #stepper>
+  <mat-step [stepControl]="defaultData">
+    <form [formGroup]="defaultData">
+      <ng-template matStepLabel>Default data</ng-template>
+
+      <mat-form-field>
+        <mat-label>Map name</mat-label>
+        <mat-select formControlName="mapName">
+          <mat-option *ngFor="let m of maps" [value]="m">
+            {{m}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Team side</mat-label>
+        <mat-select formControlName="teamSide">
+          <mat-option *ngFor="let ts of sides" [value]="ts">
+            {{ts}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <mat-label>Tactic</mat-label>
+        <mat-select formControlName="tactic">
+          <mat-option *ngFor="let t of tactics" [value]="t">
+            {{t}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="firstPlayerData">
+    <form [formGroup]="firstPlayerData">
+      <ng-template matStepLabel>First player</ng-template>
+
+      <mat-form-field>
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondPlayerData">
+    <form [formGroup]="secondPlayerData">
+      <ng-template matStepLabel>Second player</ng-template>
+
+      <mat-form-field>
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+
+  <mat-step [stepControl]="thirdPlayerData">
+    <form [formGroup]="thirdPlayerData">
+      <ng-template matStepLabel>Third player</ng-template>
+
+      <mat-form-field>
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </form>
+  </mat-step>
+
+
+  <mat-step [stepControl]="fourthPlayerData">
+    <form [formGroup]="fourthPlayerData">
+      <ng-template matStepLabel>Fourth player</ng-template>
+
+      <mat-form-field>
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+
+  <mat-step [stepControl]="fifthPlayerData">
+    <form [formGroup]="fifthPlayerData">
+      <ng-template matStepLabel>Fifth player</ng-template>
+
+      <mat-form-field>
+        <mat-label>Player rank</mat-label>
+        <mat-select formControlName="rank">
+          <mat-option *ngFor="let r of ranks" [value]="r">
+            {{r}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Insert player name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput formControlName="cash" placeholder="Insert player cash">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Armaments</mat-label>
+        <mat-select formControlName="armament" multiple>
+          <mat-option *ngFor="let a of armamentList" [value]="a">
+            {{a}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Recommend</ng-template>
+    <button mat-button (click)="recommend()">Recommend</button>
+  </mat-step>
+
+</mat-vertical-stepper>
+
+<div *ngIf="results != {}" fxLayout="row">
+  <mat-card *ngFor="let r of parseResults(results)" class = "card" >
+    <mat-card-header>
+      <mat-card-title>{{r}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let i of parseItems(r)">
+            <p>{{i.name}}: {{i.price | currency:'USD'}}</p>
+          </mat-list-item>
+        </mat-list>
+      <p>
+        Total:{{calculateTotal(r) | currency:'USD'}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

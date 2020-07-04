@@ -18,9 +18,11 @@ import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
 import { TextEditorComponent } from './add-new-rule/text-editor/text-editor.component';
 import {MatInputModule} from '@angular/material/input';
+import {MatStepperModule} from '@angular/material/stepper';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {FormsModule} from '@angular/forms';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 export function getHighlightLanguages() {
   return {
@@ -49,9 +51,12 @@ export function getHighlightLanguages() {
     MatListModule,
     MatSelectModule,
     MatInputModule,
+    MatStepperModule,
+    ReactiveFormsModule,
     FlexLayoutModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule
   ],
   providers: [
     {

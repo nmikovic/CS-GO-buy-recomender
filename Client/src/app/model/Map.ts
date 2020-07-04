@@ -1,4 +1,4 @@
-export enum MapEnum{
+export enum Map{
   CACHE,
   MIRAGE
 }

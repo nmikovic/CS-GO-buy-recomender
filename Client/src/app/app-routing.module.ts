@@ -6,6 +6,7 @@ import {AddNewRuleComponent} from './add-new-rule/add-new-rule.component';
 const routes: Routes = [
   {path : 'recommend', component: RecommendComponent},
   {path : 'rules', component: AddNewRuleComponent},
+  {path : '', redirectTo: '/recommend', pathMatch: 'full'}
 ];
 
 @NgModule({

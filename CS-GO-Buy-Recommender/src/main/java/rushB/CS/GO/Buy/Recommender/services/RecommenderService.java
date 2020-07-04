@@ -87,4 +87,8 @@ public class RecommenderService {
 
         return results;
     }
+
+    public HashMap<String, Armament> getArmaments(){
+        return this.armaments;
+    }
 }
