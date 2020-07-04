@@ -86,11 +86,11 @@ export class RecommendComponent implements OnInit {
 
     const playerForms = [this.firstPlayerData, this.secondPlayerData, this.thirdPlayerData, this.fourthPlayerData, this.fifthPlayerData];
     const players = [];
-    const cash: Map<string, number> = new Map<string, number>();
-    const armaments = new Map<string, Armament[]>();
+    const cash = {};
+    const armaments = {};
     playerForms.forEach((form) => {
       // cash
-      cash.set(form.controls.name.value, form.controls.cash.value as number);
+      cash[form.controls.name.value] = form.controls.cash.value as number;
       // player
       const p: Player = {
         rank: form.controls.rank.value,
@@ -107,13 +107,13 @@ export class RecommendComponent implements OnInit {
         armament.push(this.armamentMap[weapon]);
       });
 
-      armaments.set(form.controls.name.value, armament);
+      armaments[form.controls.name.value] =  armament;
     });
     roundInput.players = players;
     roundInput.cash = cash;
     roundInput.armaments = armaments;
 
-    console.log(roundInput);
+    console.log(JSON.stringify(roundInput));
 
     this.apiService.recommend(roundInput).subscribe({
       next: (result: Map<string, Armament[]>) => {
